@@ -1,0 +1,13 @@
+#signup{
+    margin-left: 5px;
+    margin-top: 10px;
+  }
+  .error{
+    color: red;
+    font-size: smaller;
+  }
+  
+  #login{
+    margin-left: 5px;
+    margin-top: 10px;
+  }
