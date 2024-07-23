@@ -15,6 +15,7 @@
                 <li><a href="list-users.php">Users</a></li>
                 <li><a href=" agentloclist.php ">Setting</a></li>
                 <li><a href=" geoloclist.php ">Configuration</a></li>
+                <li><a href=" myProfile.php ">My Profile</a></li>
             </ul>
 
         </div>

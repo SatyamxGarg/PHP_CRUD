@@ -324,20 +324,20 @@ $w4 = mysqli_num_rows($result4);
         function getData() {
 
             return [{
-                    name: "Week 1",
-                    y: <?php echo $w1 ?>
+                    name: " 1",
+                    y: <?php echo $w4 ?>
                 },
                 {
-                    name: "Week 2",
-                    y: <?php echo $w2 ?>
-                },
-                {
-                    name: "Week 3",
+                    name: " 2",
                     y: <?php echo $w3 ?>
                 },
                 {
-                    name: "Week 4",
-                    y: <?php echo $w4 ?>
+                    name: " 3",
+                    y: <?php echo $w2 ?>
+                },
+                {
+                    name: " 4",
+                    y: <?php echo $w1 ?>
                 },
 
 
@@ -407,19 +407,19 @@ $w4 = mysqli_num_rows($result4);
         function lineChartData() {
             const data = [{
                     Weeks: 1,
-                    y: <?php echo $w1 ?>
+                    y: <?php echo $w4 ?>
                 },
                 {
                     Weeks: 2,
-                    y: <?php echo $w2 ?>
-                },
-                {
-                    Weeks: 3,
                     y: <?php echo $w3 ?>
                 },
                 {
+                    Weeks: 3,
+                    y: <?php echo $w2 ?>
+                },
+                {
                     Weeks: 4,
-                    y: <?php echo $w4 ?>
+                    y: <?php echo $w1 ?>
                 },
             ]
             return data;
@@ -440,7 +440,7 @@ $w4 = mysqli_num_rows($result4);
                 title: {
                     text: ''
                 },
-                categories: ['Week 1', 'Week 2', 'Week 3', 'Week 4']
+                categories: ['1', '2', '3', '4']
             },
 
             yAxis: {

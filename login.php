@@ -27,6 +27,7 @@ if (isset($_POST['submit'])) {
         $_SESSION['loggedin'] = true;
         $_SESSION['email'] = $email;
         $_SESSION['fname'] = $row5['fname'];
+        $_SESSION['id'] = $row5['id'];
         header("location:dashboard.php");
     } else {
         $showError = "Invalid credentials";
