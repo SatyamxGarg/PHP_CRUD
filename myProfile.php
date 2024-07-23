@@ -31,7 +31,7 @@ if(!isset($_SESSION['loggedin']) || ($_SESSION['loggedin'])!=TRUE){
     $country = $row['country'];
     $state = $row['state'];
     $city = $row['city'];
-    $confirmation=$row['confirm'];
+    
     ?>
 <html lang="en">
 
@@ -97,8 +97,12 @@ if(!isset($_SESSION['loggedin']) || ($_SESSION['loggedin'])!=TRUE){
         <h1>My Profile</h1>
         <div class="list-contet">
         <div class="user-data">
-  <div class="profile-img">
-    <img src="images/user.png" alt="img">
+  <div class="profile-pic">
+    <img src="images/user.png" alt="img" id="profile-image">
+    <form id="image-form">
+    <input type="file" name="profile" id="select-file" onchange="imgChange(event)">
+    </form>
+  
   </div>
   <div class="info-bar">
     <table class="user-info-table">
@@ -161,8 +165,16 @@ if(!isset($_SESSION['loggedin']) || ($_SESSION['loggedin'])!=TRUE){
     </div>
 
   </div>
+  <script>
+    function imgChange(event) {
+      const image = event.target.files[0];
+      const img = document.getElementById("profile-image");
+      const imageUrl = URL.createObjectURL(image);
+      img.src = imageUrl;
+      console.log(imageUrl);
+    }
+  </script>
 
- 
 
 </body>
 
