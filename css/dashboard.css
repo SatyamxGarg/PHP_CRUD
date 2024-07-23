@@ -1340,13 +1340,18 @@ th a{
 /*profile-page */
 
 
-
+.profile-pic{
+  display: flex;
+  align-items: center;
+  justify-content:center;
+  width:300px;
+}
 
 .profile-pic img {
   width: 120px; 
   height: 120px;
   border-radius: 50%;
-  border: 3px solid #333; 
+  /* border: 3px solid #333;  */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
   display: block;
   margin: 0 auto 20px auto; 
@@ -1405,4 +1410,40 @@ margin:10px;
 padding-bottom: 20px;
 padding-top: 10px;
 
+}
+
+
+.edit-btn{
+  background:#FF651B;
+  border: medium none;  border: medium none;
+  border-radius: 4px;
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  font-size: 13px;
+  border-radius: 10px;
+  height: 40px;
+  cursor: pointer;
+  font-family: 'OpenSansSemibold';
+  transition: 0.2s;
+}
+
+.edit-btn:hover{
+  background-color: #214139;
+}
+
+.edit-btn input {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.edit-btn svg{
+  cursor: pointer;
 }
