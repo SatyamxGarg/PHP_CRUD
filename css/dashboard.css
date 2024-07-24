@@ -1344,7 +1344,7 @@ th a{
   display: flex;
   align-items: center;
   justify-content:center;
-  width:300px;
+  
 }
 
 .profile-pic img {
@@ -1354,7 +1354,8 @@ th a{
   /* border: 3px solid #333;  */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
   display: block;
-  margin: 0 auto 20px auto; 
+  /* margin: 0 auto 20px auto;  */
+  margin-bottom:15px;
 }
 
 .info-bar {
@@ -1430,6 +1431,7 @@ padding-top: 10px;
   cursor: pointer;
   font-family: 'OpenSansSemibold';
   transition: 0.2s;
+  margin-left:20px;
 }
 
 .edit-btn:hover{
@@ -1446,4 +1448,49 @@ padding-top: 10px;
 
 .edit-btn svg{
   cursor: pointer;
+}
+
+
+.profile-btn{
+  
+  border: medium none;  border: medium none;
+  border-radius: 4px;
+  
+  cursor: pointer;
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  font-size: 13px;
+  border-radius: 10px;
+  height: 40px;
+  cursor: pointer;
+  font-family: 'OpenSansSemibold';
+  transition: 0.2s;
+  margin-left:20px;
+}
+
+.profile-pic button{
+  background-color: transparent;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  margin-left: 10px;
+}
+
+#profile-dlt{
+
+  vertical-align: middle;
+ width:40px;
+  height:40px;
+ 
+  font-size: 20px;
+  background-color: #FF651B;
+  color:white;
+  cursor: pointer;
+  border-radius: 25%;
+  display: flex;
+    align-items: center;
+    justify-content: center
 }
