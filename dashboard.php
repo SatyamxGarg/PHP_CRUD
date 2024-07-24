@@ -178,7 +178,7 @@ $w4 = mysqli_num_rows($result4);
 						<li><a href=""><span class="left"><img class="selected-act" src="images/configuration-hover.png"><img class="hidden" src="images/configuration.png" /></span><span class="right">Configuration</span></a></li>
 
 					</ul>
-				</div> --><span id="selectSpan">Filter:</span>
+				</div> --><span id="selectSpan"><b>Filter:</b></span>
                 <select id="selectFilter" onchange="filterData()">
                     <!-- <option value="all" >All</option> -->
                     <option value="month"  <?php echo ($grp == 'month') ? 'selected' : ''; ?>>1 Month</option>

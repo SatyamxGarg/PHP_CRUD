@@ -6,6 +6,14 @@ if(!isset($_SESSION['loggedin']) || ($_SESSION['loggedin'])!=TRUE){
 }
 include 'connect.php';
 
+$id=$_SESSION['id']; 
+$sq='select role_id from employees where id='.$id;
+$res=mysqli_query($con,$sq);
+$row=mysqli_fetch_array($res);
+if($row['role_id']!=1 && $row['role_id']!=5){
+	header("location: dashboard.php");
+	exit;
+}
 // 	 Pagination
 $limit = 10;
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;

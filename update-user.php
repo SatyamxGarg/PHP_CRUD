@@ -6,10 +6,25 @@ if(!isset($_SESSION['loggedin']) || ($_SESSION['loggedin'])!=TRUE){
   exit;
 }
     include 'connect.php';
+
+    $myID=$_SESSION['id'];
+    $sq='select role_id from employees where id='.$myID;
+    $res=mysqli_query($con,$sq);
+    $row1=mysqli_fetch_array($res);
+
+    
+
+
     $id = $_GET["u_id"];
     $sql = "select *from employees where id=$id";
     $result = mysqli_query($con, $sql);
     $row = mysqli_fetch_array($result);
+
+
+    if($row1['role_id']!=1 && $row1['role_id']!=5 && $myID!=$row['id']){
+      header("location: dashboard.php");
+      exit;
+    }
   
     $fname = $row['fname'];
     $lname = $row['lname'];
