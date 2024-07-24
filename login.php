@@ -85,6 +85,7 @@ if (isset($_POST['submit'])) {
                             <input type="password" class="form-control" id="password" name="password" />
                         </div>
                         <button type="submit" name="submit" class="btn_login">Login</button>
+                        <a href="forgetPassword.php" style="float:right">Forget Password?</a>
                         <p id="signup">Don't have an account?<a href="signup.php"> signup</a></p>
                     </form>
                 </div>
