@@ -16,8 +16,8 @@ if (isset($_POST['reset_password'])) {
             $get_email = $row['email'];
             echo $get_email;
     
-    
-            $update_token = "UPDATE employees SET verify_token = '$token' WHERE email = '$get_email' LIMIT 1";
+            $time=time();
+            $update_token = "UPDATE employees SET token_id = '$token',token_startAT='$time' WHERE email = '$get_email' LIMIT 1";
             $update_token_run = mysqli_query($con, $update_token);
     
             if ($update_token_run) {

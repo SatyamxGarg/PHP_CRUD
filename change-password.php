@@ -6,14 +6,32 @@ session_start();
 include 'connect.php';
 
 
-if(isset($_GET['token'])){
+if (isset($_GET['token'])) {
   $token = $_GET['token'];
-  $sql="select *from employees where verify_token='$token'";
-  $result = mysqli_query($con,$sql);
-  $row=mysqli_num_rows($result);
-  if($row<=0){
-    $_SESSION['status'] = "Link already used.";
-     header('location:login.php');
+  $sql = "select * from employees where token_id='$token'";
+  $result = mysqli_query($con, $sql);
+  $row = mysqli_num_rows($result);
+  $data = mysqli_fetch_array($result);
+  $time1 = time();
+  if ($row <= 0) {
+    $_SESSION['status'] = "Invalid URL.";
+    header("Location: login.php");
+  } else {
+    $time_store = $data['token_startAT'];
+    if ($time_store + (60 * 2) < $time1) {
+      $sql = "UPDATE employees SET token_id=NULL,token_startAT=NULL WHERE token_id='$token'";
+      $result = mysqli_query($con, $sql);
+      if ($result) {
+        $_SESSION['status'] = "Time Expired.";
+        header("Location: login.php");
+        exit(0);
+      } else {
+        header("Location: login.php");
+        exit(0);
+      }
+     
+      
+    }
   }
 } else {
   $_SESSION['status'] = "Password not Updated";
@@ -61,12 +79,12 @@ if (isset($_POST['password_update'])) {
     if (!empty($token)) {
 
       // checking token is valid or not
-      $check_token = "SELECT verify_token FROM employees WHERE verify_token='$token' LIMIT 1";
+      $check_token = "SELECT token_id FROM employees WHERE token_id='$token' LIMIT 1";
       $check_token_run = mysqli_query($con, $check_token);
       if (mysqli_num_rows($check_token_run) > 0) {
         if ($new_password == $confirm_password) {
           $new_password = md5($new_password);
-          $update_password = "UPDATE employees SET password = '$new_password', verify_token=NULL WHERE verify_token='$token'";
+          $update_password = "UPDATE employees SET password = '$new_password', token_id=NULL,token_startAT=NULL WHERE token_id='$token'";
           $update_password_run = mysqli_query($con, $update_password);
           if ($update_password_run) {
             $_SESSION['status'] = "Password Successfully Updated";
@@ -137,8 +155,8 @@ if (isset($_POST['password_update'])) {
       <div class="heading-top">
         <div class="logo-cebter"><a href="#"><img src="images/at your service_banner.png"></a></div>
       </div>
-      <div class="box" style="height:400px">
-        <div class="outer_div">
+      <div class="box" style="height:300px">
+        <div class="pswd-div" style="padding:24px;">
           <h2 style="text-align:center;background-color:rgb(239, 239, 239); padding:7px 12px;width:90%;font-size:larger;">Reset Password <span></span></h2>
           <?php if (isset($_SESSION['status'])) : ?>
             <div class="error-message-div error-msg"><?php echo $_SESSION['status'];
@@ -157,10 +175,10 @@ if (isset($_POST['password_update'])) {
             </div>
             <div class="form-group">
               <label for="confirm_password">Confirm Password</label>
-              <input type="password" class="form-control" name="confirm_password" placeholder="Update Password" />
+              <input type="password" class="form-control" name="confirm_password" placeholder="Confirm Password" />
               <span id="cpasswordError" class="error"><?php echo isset($errors['confirm_password']) ? $errors['confirm_password'] : ''; ?></span>
             </div>
-            <button class="submit-btn" type="submit" name="password_update">Update Password</button>
+            <button class="submit-btn" type="submit" name="password_update" style="margin-top:10px;">Update Password</button>
           </form>
         </div>
       </div>

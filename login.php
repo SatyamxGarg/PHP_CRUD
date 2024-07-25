@@ -67,7 +67,7 @@ if (isset($_POST['submit'])) {
                                                       unset($_SESSION['status']); ?></div>
           <?php endif; ?>
             <div class="box">
-                <div class="outer_div">
+                <div class="outer_div" style="overflow-y:unset">
 
                     <h2>User <span>Login</span></h2>
                     <?php
