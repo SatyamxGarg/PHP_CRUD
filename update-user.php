@@ -67,7 +67,19 @@ if(!isset($_SESSION['loggedin']) || ($_SESSION['loggedin'])!=TRUE){
         if (empty($_POST['email'])) {
             $errors['email'] = 'Email is required';
         } else {
-            $email = $_POST['email'];
+            $new_email = $_POST['email'];
+           
+            if($new_email!=$email){
+              if(!filter_var($new_email, FILTER_VALIDATE_EMAIL)){
+                $errors['email'] = 'Invalid E-Mail Format';
+              }
+              else{
+            $sql_check_email = "SELECT * FROM `employees` WHERE email='$new_email'";
+      $result_check_email = $con->query($sql_check_email);
+              
+      if ($result_check_email->num_rows > 0) {
+        $errors['email'] = "Email already exists";}
+      }}
             
         }
         if (!empty($_POST['mobile'])) {
@@ -139,7 +151,7 @@ if(!isset($_SESSION['loggedin']) || ($_SESSION['loggedin'])!=TRUE){
         }
           $updatedAT = time();
         if (empty($errors)) {
-            $sql = "update `employees` set fname='$fname',lname='$lname',age='$age',gender='$gender',email='$email',mobile='$mobile',country='$country',role_id='$role',state='$state',city='$city',password='$password',updatedAt='$updatedAT',confirm='$confirmation' where id=$id";
+            $sql = "update `employees` set fname='$fname',lname='$lname',age='$age',gender='$gender',email='$new_email',mobile='$mobile',country='$country',role_id='$role',state='$state',city='$city',password='$password',updatedAt='$updatedAT',confirm='$confirmation' where id=$id";
             $result = mysqli_query($con, $sql);
             if ($result) {
                 header('location:list-users.php');

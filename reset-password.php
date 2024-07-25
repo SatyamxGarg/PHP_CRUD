@@ -1,5 +1,5 @@
 <?php
-session_start();
+
 include('connect.php');
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -37,6 +37,7 @@ function send_password_reset($get_name, $get_email, $token)
 <h2>Hello</h2>
 <h3>You are receiving this email because we have received a password reset request for your account.</h3>
 <a href = 'http://localhost/Crud_design/change-password.php?token=$token'>Click Me </a>
+<h3>This link is only be used once.</h3>
 ";
         // Send email
         $mail->send();

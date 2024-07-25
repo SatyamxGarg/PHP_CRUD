@@ -751,3 +751,80 @@ if(!isset($_SESSION['loggedin']) || ($_SESSION['loggedin'])!=TRUE){
 </body>
 
 </html>
+
+
+
+<?php
+
+
+$new_password = mysqli_real_escape_string($con, $_POST['new_password']);
+    $confirm_password = mysqli_real_escape_string($con, $_POST['confirm_password']);
+    $token = mysqli_real_escape_string($con, $_POST['password_token']);
+    if (!empty($token)) {
+        if (!empty($email) && !empty($new_password) && !empty($token)) {
+            // checking token is valid or not
+            $check_token = "SELECT verify_token FROM employees WHERE verify_token='$token' LIMIT 1";
+            $check_token_run = mysqli_query($con, $check_token);
+            if (mysqli_num_rows($check_token_run) > 0) {
+                if ($new_password == $confirm_password) {
+                    $new_password = md5($new_password);
+                    $update_password = "UPDATE employees SET password = '$new_password' WHERE verify_token='$token' LIMIT 1";
+                    $update_password_run = mysqli_query($con, $update_password);
+                    if ($update_password_run) {
+                        $_SESSION['status'] = "Password Successfully Updated";
+                        header("Location: login.php");
+                        exit(0);
+                    } else {
+                        $_SESSION['status'] = "Did not update password, something went wrong.";
+                        header("Location: change-password.php");
+                        exit(0);
+                    }
+                } else {
+                    $_SESSION['status'] = "Password Does not match";
+                    header("Location: change-password.php");
+                    exit(0);
+                }
+            }
+        } else {
+            $_SESSION['status'] = "All fields are mendatory";
+            header("Location: change-password.php?token=$token&email=$email");
+            exit(0);
+        }
+    } else {
+        $_SESSION['status'] = "No token available";
+        header("Location: forgetPassword.php");
+        exit(0);
+  
+  }
+
+
+
+
+
+
+  if (empty($_POST['email'])) {
+    $errors['email'] = 'Email is required';
+} else {
+    $email = $_POST['email'];
+    if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+      $errors['email'] = 'Invalid E-Mail Format';
+    }
+    else{
+      $sql_check_email = "SELECT * FROM `employees` WHERE email='$email'";
+$result_check_email = $con->query($sql_check_email);
+if($result_check_email->num_rows>=1){
+while($row=mysqli_fetch_array($result_check_email)){
+  $uid=$row["id"];
+  if($uid!=$id){
+    $errors["email"] = "Emailm already exists";
+  }
+}
+    }
+}
+
+}
+  ?>
+
+
+
+

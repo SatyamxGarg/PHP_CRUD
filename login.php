@@ -62,6 +62,10 @@ if (isset($_POST['submit'])) {
             <div class="heading-top">
                 <div class="logo-cebter"><a href="#"><img src="images/at your service_banner.png"></a></div>
             </div>
+            <?php if (isset($_SESSION['status'])) : ?>
+            <div class="error-message-div error-msg" style="margin-bottom:10px;"><?php echo $_SESSION['status'];
+                                                      unset($_SESSION['status']); ?></div>
+          <?php endif; ?>
             <div class="box">
                 <div class="outer_div">
 

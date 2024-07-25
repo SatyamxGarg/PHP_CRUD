@@ -6,12 +6,28 @@ session_start();
 include 'connect.php';
 
 
-if (isset($_POST['submit'])) {
+if(isset($_GET['token'])){
+  $token = $_GET['token'];
+  $sql="select *from employees where verify_token='$token'";
+  $result = mysqli_query($con,$sql);
+  $row=mysqli_num_rows($result);
+  if($row<=0){
+    $_SESSION['status'] = "Link already used.";
+     header('location:login.php');
+  }
+} else {
+  $_SESSION['status'] = "Password not Updated";
+  header('location:login.php');
+}
+
+
+if (isset($_POST['password_update'])) {
+
   $errors = [];
-  if (empty($_POST['email'])) {
-    $errors["email"] = "E-Mail is required.";
+  if (empty($_POST['password_token'])) {
+    $errors["password_token"] = "Token is empty.";
   } else {
-    $email = $_POST['email'];
+    $token = $_POST['password_token'];
   }
 
   if (!empty($_POST['new_password'])) {
@@ -32,7 +48,37 @@ if (isset($_POST['submit'])) {
     if ($confirm_password != $new_password) {
       $error['confirm_password'] = 'Password not match';
     } else {
-      $new_password = $confrim_password;
+      $new_password = $confirm_password;
+    }
+  }
+
+  if (empty($errors)) {
+    echo "$token";
+
+
+
+
+    if (!empty($token)) {
+
+      // checking token is valid or not
+      $check_token = "SELECT verify_token FROM employees WHERE verify_token='$token' LIMIT 1";
+      $check_token_run = mysqli_query($con, $check_token);
+      if (mysqli_num_rows($check_token_run) > 0) {
+        if ($new_password == $confirm_password) {
+          $new_password = md5($new_password);
+          $update_password = "UPDATE employees SET password = '$new_password', verify_token=NULL WHERE verify_token='$token'";
+          $update_password_run = mysqli_query($con, $update_password);
+          if ($update_password_run) {
+            $_SESSION['status'] = "Password Successfully Updated";
+            header("Location: login.php");
+            exit(0);
+          } else {
+            $_SESSION['status'] = "Did not update password, something went wrong.";
+            header("Location: change-password.php");
+            exit(0);
+          }
+        }
+      }
     }
   }
 }
@@ -51,24 +97,15 @@ if (isset($_POST['submit'])) {
   <script>
     function validateForm() {
       var isValid = true;
-      var email = document.forms["passForm"]["email"].value;
 
       var new_password = document.forms["passForm"]["new_password"].value;
       var confirm_password = document.forms["passForm"]["confirm_password"].value;
-      var emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
       var passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-      document.getElementById("emailError").innerHTML = "";
       document.getElementById("passwordError").innerHTML = "";
       document.getElementById("cpasswordError").innerHTML = "";
 
-      if (email == "") {
-        document.getElementById("emailError").innerHTML = "Email must be filled out.";
-        isValid = false;
-      } else if (!email.match(emailPattern)) {
-        document.getElementById("emailError").innerHTML = "Please enter a valid email address.";
-        isValid = false;
-      }
+
 
       if (new_password == "") {
         document.getElementById("passwordError").innerHTML = "Password must be filled out.";
@@ -81,12 +118,11 @@ if (isset($_POST['submit'])) {
       if (confirm_password == "") {
         document.getElementById("cpasswordError").innerHTML = "Please Retype Password.";
         isValid = false;
-      } else if (confirmpassword != new_password) {
+      } else if (confirm_password != new_password) {
         document.getElementById("cpasswordError").innerHTML = "Password dosen't match.";
         isValid = false;
       }
-      console.log(isValid)
-      return false;
+      return isValid;
 
     }
   </script>
@@ -108,16 +144,12 @@ if (isset($_POST['submit'])) {
             <div class="error-message-div error-msg"><?php echo $_SESSION['status'];
                                                       unset($_SESSION['status']); ?></div>
           <?php endif; ?>
-          <form name="passForm" class="margin_bottom" onsubmit="return validateForm()" action="reset-password.php" role="form" method="POST">
+          <form name="passForm" class="margin_bottom" onsubmit="return validateForm()" action="" role="form" method="POST">
             <input type="hidden" name="password_token" value="<?php if (isset($_GET['token'])) {
                                                                 echo $_GET['token'];
                                                               } ?>">
 
-            <div class="form-group">
-              <label for="email">Email Address</label>
-              <input type="email" class="form-control" name="email" value="<?php echo isset($email) ? $email : ''; ?>" placeholder="Enter Email Address" />
-              <span id="emailError" class="error"><?php echo isset($errors['email']) ? $errors['email'] : ''; ?></span>
-            </div>
+
             <div class="form-group">
               <label for="new_password">Password</label>
               <input type="password" class="form-control" name="new_password" placeholder="Enter New Password" />
@@ -128,7 +160,7 @@ if (isset($_POST['submit'])) {
               <input type="password" class="form-control" name="confirm_password" placeholder="Update Password" />
               <span id="cpasswordError" class="error"><?php echo isset($errors['confirm_password']) ? $errors['confirm_password'] : ''; ?></span>
             </div>
-            <button class="submit-btn" name="password_update">Update Password</button>
+            <button class="submit-btn" type="submit" name="password_update">Update Password</button>
           </form>
         </div>
       </div>
