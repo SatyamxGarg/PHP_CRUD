@@ -4,7 +4,7 @@
 
 session_start();
 include 'connect.php';
-include 'changePassword-Mail.php';
+include 'mailTemplates.php';
 
 if (isset($_GET['token'])) {
   $token = $_GET['token'];

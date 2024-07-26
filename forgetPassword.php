@@ -1,6 +1,6 @@
 <?php
 include 'connect.php';
-include 'reset-password.php';
+include 'mailTemplates.php';
 session_start();
 
 if (isset($_POST['reset_password'])) {
