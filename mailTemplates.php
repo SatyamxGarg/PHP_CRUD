@@ -93,8 +93,9 @@ function changePassword_Msg($fname, $email)
         <div class='inner' style='border-radius:10px; height:320px; margin-left:450px;margin-top:60px; background-color: white; padding:20px;'>
         <h1 style='color:#506BEC';>Hello $fname!</h1>
 <h4>We wanted to let you know that your password was reset.</h4>
+<p style='margin-top:40px;'>If done by you then you can ignore this message.</p>
 
-    <p style='margin-top:80px;''>If you have any problems, please contact us by visiting our website.</p>
+    <p style='margin-top:60px;''>If you have any problems, please contact us by visiting our website.</p>
 
         </div>
         
