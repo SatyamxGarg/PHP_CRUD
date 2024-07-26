@@ -1,5 +1,5 @@
 ﻿<?php
-
+include 'signupMail.php';
 session_start();
 
 if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == TRUE){
@@ -140,6 +140,7 @@ if (isset($_POST['submit'])) {
    
           if ($con->query($sql) === TRUE) {
             $show_alert = true;
+            signup_Msg($fname, $email);
             header('location: login.php');
             exit(); 
             } else {

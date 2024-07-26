@@ -4,7 +4,7 @@
 
 session_start();
 include 'connect.php';
-
+include 'changePassword-Mail.php';
 
 if (isset($_GET['token'])) {
   $token = $_GET['token'];
@@ -13,6 +13,8 @@ if (isset($_GET['token'])) {
   $result = mysqli_query($con, $sql);
   $row = mysqli_num_rows($result);
   $data = mysqli_fetch_array($result);
+  $fname=$data['fname'];
+  $email=$data['email'];
   $time1 = time();
   if ($row <= 0) {
     $_SESSION['status'] = "Invalid URL.";
@@ -89,6 +91,7 @@ if (isset($_POST['password_update'])) {
           $update_password_run = mysqli_query($con, $update_password);
           if ($update_password_run) {
             $_SESSION['status'] = "Password Successfully Updated";
+            changePassword_Msg($fname, $email);
             header("Location: login.php");
             exit(0);
           } else {
