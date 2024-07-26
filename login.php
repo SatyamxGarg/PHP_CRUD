@@ -53,6 +53,35 @@ if (isset($_POST['submit'])) {
  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
  <![endif]-->
+
+ <script>
+    function validateForm() {
+      var isValid = true;
+      var email = document.forms["loginForm"]["email"].value;
+      var password = document.forms["loginForm"]["password"].value;
+      var emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+
+      document.getElementById("emailError").innerHTML = "";
+      document.getElementById("passwordError").innerHTML = "";
+
+
+      if (email == "") {
+        document.getElementById("emailError").innerHTML = "Email must be filled out.";
+        isValid = false;
+      } else if (!email.match(emailPattern)) {
+        document.getElementById("emailError").innerHTML = "Please enter a valid email address.";
+        isValid = false;
+      }
+
+      if (password == "") {
+        document.getElementById("passwordError").innerHTML = "Password must be filled out.";
+        isValid = false;
+      }
+
+      return isValid;
+
+    }
+</script>
 </head>
 
 <body>
@@ -70,6 +99,7 @@ if (isset($_POST['submit'])) {
                 <div class="outer_div" style="overflow-y:unset">
 
                     <h2>User <span>Login</span></h2>
+                    
                     <?php
                     if ($login) {
                         echo '<div class="error-message-div error-msg"><img src="images/sucess-msg.png"><strong>Success!!</strong>Sign-In Successfully</div>';
@@ -78,15 +108,16 @@ if (isset($_POST['submit'])) {
                         echo '<div class="error-message-div error-msg"><img src="images/unsucess-msg.png"><strong>Invalid!</strong> username or password </div>';
                     }
                     ?>
-
-                    <form class="margin_bottom" role="form" method="POST">
+                    <form name="loginForm" class="margin_bottom" role="form" method="POST" onsubmit=" return validateForm()">
                         <div class="form-group">
                             <label for="email">E-mail</label>
                             <input type="email" class="form-control" id="email" name="email" value="<?php echo isset($email) ? $email : ''; ?>" />
+                            <span id="emailError" class="error"><?php echo isset($errors['email']) ? $errors['email'] : ''; ?></span>
                         </div>
                         <div class="form-group">
                             <label for="password">Password</label>
                             <input type="password" class="form-control" id="password" name="password" />
+                            <span id="passwordError" class="error"><?php echo isset($errors['password']) ? $errors['password'] : ''; ?></span>
                         </div>
                         <button type="submit" name="submit" class="btn_login">Login</button>
                         <a href="forgetPassword.php" style="float:right">Forget Password?</a>

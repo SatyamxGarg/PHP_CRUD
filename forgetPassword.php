@@ -7,13 +7,14 @@ if (isset($_POST['reset_password'])) {
         $email = mysqli_real_escape_string($con, $_POST['email']);
         $token = md5(rand());
     
-        $check_email = "SELECT email, fname FROM employees WHERE email = '$email' LIMIT 1";
+        $check_email = "SELECT email, fname,id FROM employees WHERE email = '$email' LIMIT 1";
         $check_email_run = mysqli_query($con, $check_email);
     
         if (mysqli_num_rows($check_email_run) > 0) {
             $row = mysqli_fetch_array($check_email_run);
             $get_name = $row['fname'];
             $get_email = $row['email'];
+            $get_id= $row['id'];
             echo $get_email;
     
             $time=time();
@@ -21,7 +22,7 @@ if (isset($_POST['reset_password'])) {
             $update_token_run = mysqli_query($con, $update_token);
     
             if ($update_token_run) {
-                send_password_reset($get_name, $get_email, $token);
+                send_password_reset($get_name, $get_email, $token,$get_id);
                 $_SESSION['status'] = "We have e-mail you a password reset link.";
                 header("Location: forgetPassword.php");
                 exit(0);

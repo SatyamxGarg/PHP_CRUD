@@ -8,7 +8,8 @@ include 'connect.php';
 
 if (isset($_GET['token'])) {
   $token = $_GET['token'];
-  $sql = "select * from employees where token_id='$token'";
+  $id= $_GET['id'];
+  $sql = "select * from employees where id='$id' AND token_id='$token'";
   $result = mysqli_query($con, $sql);
   $row = mysqli_num_rows($result);
   $data = mysqli_fetch_array($result);
@@ -19,7 +20,7 @@ if (isset($_GET['token'])) {
   } else {
     $time_store = $data['token_startAT'];
     if ($time_store + (60 * 2) < $time1) {
-      $sql = "UPDATE employees SET token_id=NULL,token_startAT=NULL WHERE token_id='$token'";
+      $sql = "UPDATE employees SET token_id=NULL,token_startAT=NULL WHERE id='$id'";
       $result = mysqli_query($con, $sql);
       if ($result) {
         $_SESSION['status'] = "Time Expired.";
@@ -84,7 +85,7 @@ if (isset($_POST['password_update'])) {
       if (mysqli_num_rows($check_token_run) > 0) {
         if ($new_password == $confirm_password) {
           $new_password = md5($new_password);
-          $update_password = "UPDATE employees SET password = '$new_password', token_id=NULL,token_startAT=NULL WHERE token_id='$token'";
+          $update_password = "UPDATE employees SET password = '$new_password', token_id=NULL,token_startAT=NULL WHERE id='$id'";
           $update_password_run = mysqli_query($con, $update_password);
           if ($update_password_run) {
             $_SESSION['status'] = "Password Successfully Updated";

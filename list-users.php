@@ -179,7 +179,7 @@ $i = $offset + 1;
 					<table width="100%" cellspacing="0">
 						<tbody>
 							<tr>
-								<th width="10px">S.no</th>
+								<th width="10px">Sr No.</th>
 								<th width="98px"><a href="<?php echo 'list-users.php?sort=fname&order=' . $new_order . '&search=' . $search ?> ">First Name</a></th>
 								<th width="98px"><a href="<?php echo 'list-users.php?sort=lname&order=' . $new_order . '&search=' . $search ?> ">Last Name</a></th>
 								<th width="98px"><a href="<?php echo 'list-users.php?sort=email&order=' . $new_order . '&search=' . $search ?> ">E-Mail</a></th>
