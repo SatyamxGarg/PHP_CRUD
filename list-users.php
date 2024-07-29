@@ -27,13 +27,13 @@ $total_records = $row_total['total'];
 $total_pages = ceil($total_records / $limit);
 
 //sorting
-$sort = isset($_GET['sort']) ? $_GET['sort'] : 'id';
+$sort = isset($_GET['sort']) ? $_GET['sort'] : 'fname';
 $order = isset($_GET['order']) && $_GET['order'] === 'desc' ? 'desc' : 'asc';
 $new_order = $order === 'asc' ? 'desc' : 'asc';
-$valid_columns = ['Id', 'firstname', 'lastname', 'email', 'mobile', 'role'];
+$valid_columns = ['id', 'fname', 'lname', 'email', 'mobile', 'role'];
 
 if (!in_array($sort, $valid_columns)) {
-	$sort_column = 'Id'; // Default sorting column
+	$sort_column = 'id';
 }
 
 // Searching
@@ -180,11 +180,11 @@ $i = $offset + 1;
 						<tbody>
 							<tr>
 								<th width="10px">Sr No.</th>
-								<th width="98px"><a href="<?php echo 'list-users.php?sort=fname&order=' . $new_order . '&search=' . $search ?> ">First Name</a></th>
-								<th width="98px"><a href="<?php echo 'list-users.php?sort=lname&order=' . $new_order . '&search=' . $search ?> ">Last Name</a></th>
-								<th width="98px"><a href="<?php echo 'list-users.php?sort=email&order=' . $new_order . '&search=' . $search ?> ">E-Mail</a></th>
-								<th width="98px"><a href="<?php echo 'list-users.php?sort=mobile&order=' . $new_order . '&search=' . $search ?> ">Mobile</a></th>
-								<th width="98px"><a href="<?php echo 'list-users.php?sort=role&order=' . $new_order . '&search=' . $search ?> ">Role</a></th>
+								<th width="180px"><a href="<?php echo 'list-users.php?sort=fname&order=' . $new_order . '&search=' . $search ?> ">First Name <?php if($sort == 'fname'){ if($order=='asc'){ echo "<i class='fa-solid fa-arrow-down'></i> ";} else{ echo "<i class='fa-solid fa-arrow-up'></i>"; }} ?></a></th>
+								<th width="195x"><a href="<?php echo 'list-users.php?sort=lname&order=' . $new_order . '&search=' . $search ?> ">Last Name <?php if($sort == 'lname'){ if($order=='asc'){ echo "<i class='fa-solid fa-arrow-down'></i> ";} else{ echo "<i class='fa-solid fa-arrow-up'></i>"; }} ?></a></th>
+								<th width="120px"><a href="<?php echo 'list-users.php?sort=email&order=' . $new_order . '&search=' . $search ?> ">E-Mail <?php if($sort == 'email'){ if($order=='asc'){ echo "<i class='fa-solid fa-arrow-down'></i> ";} else{ echo "<i class='fa-solid fa-arrow-up'></i>"; }} ?></a></th>
+								<th width="110px"><a href="<?php echo 'list-users.php?sort=mobile&order=' . $new_order . '&search=' . $search ?> ">Mobile <?php if($sort == 'mobile'){ if($order=='asc'){ echo "<i class='fa-solid fa-arrow-down'></i> ";} else{ echo "<i class='fa-solid fa-arrow-up'></i>"; }} ?></a></th>
+								<th width="100px"><a href="<?php echo 'list-users.php?sort=role&order=' . $new_order . '&search=' . $search ?> ">Role <?php if($sort == 'role'){ if($order=='asc'){ echo "<i class='fa-solid fa-arrow-down'></i> ";} else{ echo "<i class='fa-solid fa-arrow-up'></i>"; }} ?></a></th>
 								<th width="98px">Operation</th>
 							</tr>
 							<?php

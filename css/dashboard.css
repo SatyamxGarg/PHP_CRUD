@@ -1494,3 +1494,7 @@ padding-top: 10px;
     align-items: center;
     justify-content: center
 }
+
+#profile-dlt:hover{
+  background-color: #214139;
+}

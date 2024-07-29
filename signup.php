@@ -140,7 +140,8 @@ if (isset($_POST['submit'])) {
    
           if ($con->query($sql) === TRUE) {
             $show_alert = true;
-            signup_Msg($fname, $email);
+            $get_name=$fname;
+            send_mail($get_name, $email, "signup",null,null);
             header('location: login.php');
             exit(); 
             } else {

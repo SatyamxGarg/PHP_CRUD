@@ -91,7 +91,7 @@ if (isset($_POST['password_update'])) {
           $update_password_run = mysqli_query($con, $update_password);
           if ($update_password_run) {
             $_SESSION['status'] = "Password Successfully Updated";
-            changePassword_Msg($fname, $email);
+            send_mail($fname, $email, "changepassword",null,null);
             header("Location: login.php");
             exit(0);
           } else {

@@ -22,7 +22,7 @@ if (isset($_POST['reset_password'])) {
             $update_token_run = mysqli_query($con, $update_token);
     
             if ($update_token_run) {
-                send_password_reset($get_name, $get_email, $token,$get_id);
+                send_mail($get_name, $get_email, "forgotpassword", $token, $get_id);
                 $_SESSION['status'] = "We have e-mail you a password reset link.";
                 header("Location: forgetPassword.php");
                 exit(0);
