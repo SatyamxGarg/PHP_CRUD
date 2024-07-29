@@ -12,7 +12,7 @@ include 'connect.php';
 if (isset($_GET['deleteid'])) {
     $userId = intval($_GET['deleteid']);
 
-    // Fetch the profile image path from the database
+  
     $sql = "SELECT profile_image FROM employees WHERE id = $userId";
     $result = mysqli_query($con, $sql);
 
@@ -20,16 +20,16 @@ if (isset($_GET['deleteid'])) {
         $row = mysqli_fetch_assoc($result);
         $imagePath = 'upload/' . $row['profile_image'];
 
-        // Delete the image file from the server if it exists
+      
         if (file_exists($imagePath)) {
             unlink($imagePath);
         }
 
-        // Update the database to remove the image reference
+        
         $sql = "UPDATE employees SET profile_image = NULL WHERE id = $userId";
         mysqli_query($con, $sql);
 
-        // Redirect to the profile page
+       
         header("Location: myProfile.php");
         exit;
     } else {
