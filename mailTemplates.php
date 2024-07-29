@@ -22,7 +22,7 @@ function send_mail($get_name, $get_email, $template_name, $token, $get_id)
             <div class='inner' style='border-radius:10px; height:320px; margin-left:450px;margin-top:60px; background-color: white; padding:20px;'>
             <h1 style='color:#506BEC';>Hello $get_name!</h1>
     <h4>We have received a password reset request for your account.</h4>
-    <span style='background-color: #506BEC;  border-radius: 4px; color: white; padding: 6px 13px; cursor:pointer; margin-top:20px; display:inline-block;'><a href = 'http://localhost/Crud_design/change-password.php?token=$token&id=$get_id' style='text-decoration:none; color:white;'>Reset Password</a></span>
+    <span style='background-color: #506BEC;  border-radius: 4px; color: white; padding: 6px 13px; cursor:pointer; margin-top:20px; display:inline-block;'><a href = 'http://localhost/Employee_management/change-password.php?token=$token&id=$get_id' style='text-decoration:none; color:white;'>Reset Password</a></span>
     <p style='margin-top:10px;'>This link can only be used <b>once</b> and is valid for only <b>two minutes.</b></p>
         <p style='margin-top:80px;''>Didn't request a password reset? You can ignore this message.</p>
             </div>
@@ -48,7 +48,7 @@ function send_mail($get_name, $get_email, $template_name, $token, $get_id)
             <div class='inner' style='border-radius:10px; height:320px; margin-left:450px;margin-top:60px; background-color: white; padding:20px;'>
             <h1 style='color:#506BEC';>Dear $get_name!</h1>
     <h4>Congratulations, your account has been successfully created.</h4>
-    <span style='background-color: #506BEC;  border-radius: 4px; color: white; padding: 6px 13px; cursor:pointer; margin-top:20px; display:inline-block;'><a href = 'http://localhost/Crud_design/login.php?' style='text-decoration:none; color:white;'>Login</a></span>
+    <span style='background-color: #506BEC;  border-radius: 4px; color: white; padding: 6px 13px; cursor:pointer; margin-top:20px; display:inline-block;'><a href = 'http://localhost/Employee_management/login.php?' style='text-decoration:none; color:white;'>Login</a></span>
     <p style='margin-top:10px;'>Please use the link to login to your account.</p>
         <p style='margin-top:80px;''>Thankyou for choosing us!.</p>
     

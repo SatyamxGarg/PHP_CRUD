@@ -39,7 +39,7 @@ if (!in_array($sort, $valid_columns)) {
 // Searching
 $search = '';
 if (isset($_GET['search']) && !empty($_GET['search'])) {
-	$search = $_GET['search'];
+	$search = trim($_GET['search']);
 
 	$sql_total = "SELECT COUNT(*) as total FROM employees WHERE isdeleted != 1 AND (fname LIKE '%$search%' 
         OR lname LIKE '%$search%' 
