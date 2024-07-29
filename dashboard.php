@@ -41,11 +41,11 @@ switch ($grp) {
 
 
 //pie chart
-$male = "SELECT * from employees where gender= 'Male'";
+$male = "SELECT * from employees where gender= 'Male' AND isdeleted=0 AND createdAT BETWEEN $time-(60*60*24*30) AND $time $timeFilter";
 $result5 = mysqli_query($con, $male);
 $m = mysqli_num_rows($result5);
 
-$female = "SELECT * from employees where gender= 'Female'";
+$female = "SELECT * from employees where gender= 'Female' AND isdeleted=0 AND createdAT BETWEEN $time-(60*60*24*30) AND $time $timeFilter";
 $result6 = mysqli_query($con, $female);
 $f = mysqli_num_rows($result6);
 
@@ -53,6 +53,60 @@ $f = mysqli_num_rows($result6);
 $week1 = "SELECT * FROM employees WHERE isdeleted = 0 AND createdAT BETWEEN $time-(60*60*24*7) AND $time $timeFilter";
 $result1 = mysqli_query($con, $week1);
 $w1 = mysqli_num_rows($result1);
+
+$day1 = "SELECT * FROM employees WHERE isdeleted = 0 AND createdAT BETWEEN $time-(60*60*24*7) AND $time-(60*60*24*6) $timeFilter";
+$res1 = mysqli_query($con, $day1);
+$d1 = mysqli_num_rows($res1);
+
+$day2 = "SELECT * FROM employees WHERE isdeleted = 0 AND createdAT BETWEEN $time-(60*60*24*6) AND $time-(60*60*24*5) $timeFilter";
+$res2 = mysqli_query($con, $day2);
+$d2 = mysqli_num_rows($res2);
+
+$day3 = "SELECT * FROM employees WHERE isdeleted = 0 AND createdAT BETWEEN $time-(60*60*24*5) AND $time-(60*60*24*4) $timeFilter";
+$res3 = mysqli_query($con, $day3);
+$d3 = mysqli_num_rows($res3);
+
+$day4 = "SELECT * FROM employees WHERE isdeleted = 0 AND createdAT BETWEEN $time-(60*60*24*4) AND $time-(60*60*24*3) $timeFilter";
+$res4 = mysqli_query($con, $day4);
+$d4 = mysqli_num_rows($res4);
+
+$day5 = "SELECT * FROM employees WHERE isdeleted = 0 AND createdAT BETWEEN $time-(60*60*24*3) AND $time-(60*60*24*2) $timeFilter";
+$res5 = mysqli_query($con, $day5);
+$d5 = mysqli_num_rows($res5);
+
+$day6 = "SELECT * FROM employees WHERE isdeleted = 0 AND createdAT BETWEEN $time-(60*60*24*2) AND $time-(60*60*24*1) $timeFilter";
+$res6 = mysqli_query($con, $day6);
+$d6 = mysqli_num_rows($res6);
+
+$day7 = "SELECT * FROM employees WHERE isdeleted = 0 AND createdAT BETWEEN $time-(60*60*24*1) AND $time  $timeFilter";
+$res7 = mysqli_query($con, $day7);
+$d7 = mysqli_num_rows($res7);
+
+$day_time= strtotime('today midnight');
+$time1 = "SELECT * FROM employees WHERE isdeleted = 0 AND createdAT BETWEEN $day_time AND $day_time+(60*60*4) $timeFilter";
+$rslt1 = mysqli_query($con, $time1);
+$t1 = mysqli_num_rows($rslt1);
+
+$time2 = "SELECT * FROM employees WHERE isdeleted = 0 AND createdAT BETWEEN $day_time+(60*60*4) AND $day_time+(60*60*8) $timeFilter";
+$rslt2 = mysqli_query($con, $time2);
+$t2 = mysqli_num_rows($rslt2);
+
+$time3 = "SELECT * FROM employees WHERE isdeleted = 0 AND createdAT BETWEEN $day_time+(60*60*8) AND $day_time+(60*60*12) $timeFilter";
+$rslt3 = mysqli_query($con, $time3);
+$t3 = mysqli_num_rows($rslt3);
+
+$time4 = "SELECT * FROM employees WHERE isdeleted = 0 AND createdAT BETWEEN $day_time+(60*60*12) AND $day_time+(60*60*16) $timeFilter";
+$rslt4 = mysqli_query($con, $time4);
+$t4 = mysqli_num_rows($rslt4);
+
+$time5 = "SELECT * FROM employees WHERE isdeleted = 0 AND createdAT BETWEEN $day_time+(60*60*16) AND $day_time+(60*60*20) $timeFilter";
+$rslt5 = mysqli_query($con, $time5);
+$t5 = mysqli_num_rows($rslt5);
+
+$time6 = "SELECT * FROM employees WHERE isdeleted = 0 AND createdAT BETWEEN $day_time+(60*60*20) AND $day_time+(60*60*24) $timeFilter";
+$rslt6 = mysqli_query($con, $time6);
+$t6 = mysqli_num_rows($rslt6);
+
 
 $week2 = "SELECT * FROM employees WHERE isdeleted = 0 AND createdAT BETWEEN $time-(60*60*24*14) AND $time-(60*60*24*7) $timeFilter";
 $result2 = mysqli_query($con, $week2);
@@ -264,7 +318,7 @@ $w4 = mysqli_num_rows($result4);
                 text: 'Gender Composition'
             },
             tooltip: {
-                valueSuffix: '%'
+                valueSuffix: ''
             },
             subtitle: {
                 text: ''
@@ -283,7 +337,7 @@ $w4 = mysqli_num_rows($result4);
                         style: {
                             fontSize: '1.2em',
                             textOutline: 'none',
-                            opacity: 0.7
+                            opacity: 0.7,
                         },
                         filter: {
                             operator: '>',
@@ -294,7 +348,7 @@ $w4 = mysqli_num_rows($result4);
                 }
             },
             series: [{
-                name: 'Percentage',
+                name: 'Total',
                 colorByPoint: true,
                 data: pieData(),
                 showInLegend: true,
@@ -324,19 +378,19 @@ $w4 = mysqli_num_rows($result4);
         function getData() {
 
             return [{
-                    name: " 1",
+                    name: "Week 1",
                     y: <?php echo $w4 ?>
                 },
                 {
-                    name: " 2",
+                    name: "Week 2",
                     y: <?php echo $w3 ?>
                 },
                 {
-                    name: " 3",
+                    name: "Week 3",
                     y: <?php echo $w2 ?>
                 },
                 {
-                    name: " 4",
+                    name: "Week 4",
                     y: <?php echo $w1 ?>
                 },
 
@@ -344,6 +398,76 @@ $w4 = mysqli_num_rows($result4);
 
             ];
         }
+
+        function getData_Week() {
+
+return [{
+       
+    
+        name: " Day 1",
+        y: <?php echo $d1 ?>
+    },
+    {   
+       name: " Day 2",
+       y: <?php echo $d2 ?>
+   },
+   { 
+       name: " Day 3",
+       y: <?php echo $d3 ?>
+   },
+   {    
+       name: " Day 4",
+       y: <?php echo $d4 ?>
+   },
+   {
+       name: " Day 5",
+       y: <?php echo $d5 ?>
+   },
+   {
+       name: " Day 6",
+       y: <?php echo $d6 ?>
+   },
+   {
+       name: " Day 7",
+       y: <?php echo $d7 ?>
+   },
+
+
+
+
+];
+}
+
+
+function getData_Day() {
+
+return [{
+       name: "12:00 - 4:00 a.m.",
+       y: <?php echo $t1 ?>
+   },
+   {
+       name: "4:00 - 8:00 a.m.",
+       y: <?php echo $t2 ?>
+   },
+   {
+       name: "8:00 - 12:00 p.m.",
+       y: <?php echo $t3 ?>
+   },
+   {
+       name: "12:00 - 4:00 p.m.",
+       y: <?php echo $t4 ?>
+   },
+   {
+       name: "4:00 - 8:00 p.m.",
+       y: <?php echo $t5 ?>
+   },
+   {
+       name: "8:00 - 12:00 a.m.",
+       y: <?php echo $t6 ?>
+   },
+
+];
+}
 
 
         Highcharts.chart('container1', {
@@ -394,9 +518,32 @@ $w4 = mysqli_num_rows($result4);
 
 
             series: [{
-                name: 'Weeks',
+
+                <?php if($grp=='month'){?>
+                    name: 'Weeks'<?php } 
+
+             else if($grp=='week'){?>
+                    name: 'Days'<?php } 
+
+            else if($grp=='day'){?>
+                    name: 'Hours' <?php } 
+                
+            else{?>
+                    name: 'Weeks'<?php } ?>,
+            
+               
                 colorByPoint: true,
-                data: getData(),
+                <?php if($grp=='month'){?>
+              data:getData() <?php } 
+
+              else if($grp=='week'){?>
+                data:getData_Week() <?php } 
+
+            else if($grp=='day'){?>
+                data:getData_Day() <?php } 
+
+            else {?>
+                data:getData() <?php } ?>,
             }],
 
         });
@@ -404,26 +551,26 @@ $w4 = mysqli_num_rows($result4);
 
         // line chart
 
-        function lineChartData() {
-            const data = [{
-                    Weeks: 1,
-                    y: <?php echo $w4 ?>
-                },
-                {
-                    Weeks: 2,
-                    y: <?php echo $w3 ?>
-                },
-                {
-                    Weeks: 3,
-                    y: <?php echo $w2 ?>
-                },
-                {
-                    Weeks: 4,
-                    y: <?php echo $w1 ?>
-                },
-            ]
-            return data;
-        }
+        // function lineChartData() {
+        //     const data = [{
+        //             Weeks: 1,
+        //             y: <?php echo $w4 ?>
+        //         },
+        //         {
+        //             Weeks: 2,
+        //             y: <?php echo $w3 ?>
+        //         },
+        //         {
+        //             Weeks: 3,
+        //             y: <?php echo $w2 ?>
+        //         },
+        //         {
+        //             Weeks: 4,
+        //             y: <?php echo $w1 ?>
+        //         },
+        //     ]
+        //     return data;
+        // }
 
         Highcharts.chart('container2', {
             title: {
@@ -440,7 +587,7 @@ $w4 = mysqli_num_rows($result4);
                 title: {
                     text: ''
                 },
-                categories: ['1', '2', '3', '4']
+                categories: ['1', '2', '3', '4','5','6','7']
             },
 
             yAxis: {
@@ -458,7 +605,17 @@ $w4 = mysqli_num_rows($result4);
             series: [{
                 name: 'Weeks',
                 //keys: ['y', 'color'],
-                data: lineChartData(),
+                <?php if($grp=='month'){?>
+              data:getData() <?php } 
+
+              else if($grp=='week'){?>
+                data:getData_Week() <?php } 
+
+            else if($grp=='day'){?>
+                data:getData_Day() <?php } 
+
+            else {?>
+                data:getData() <?php } ?>,
 
                 // [
                 //     [16, '#0000ff'],
@@ -487,7 +644,7 @@ $w4 = mysqli_num_rows($result4);
     <script>
         function filterData() {
             const selectFilter = document.getElementById('selectFilter').value;
-            window.location.href = "http://localhost/Crud_design/dashboard.php?val=" + selectFilter;
+            window.location.href = "http://localhost/Employee_management/dashboard.php?val=" + selectFilter;
         }
     </script>
 </body>
