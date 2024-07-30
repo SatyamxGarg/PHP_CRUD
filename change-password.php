@@ -18,7 +18,7 @@ if (isset($_GET['token'])) {
   $time1 = time();
   if ($row <= 0) {
     $_SESSION['status'] = "Invalid URL.";
-    header("Location: login.php");
+    header("Location:login");
   } else {
     $time_store = $data['token_startAT'];
     if ($time_store + (60 * 2) < $time1) {
@@ -26,10 +26,10 @@ if (isset($_GET['token'])) {
       $result = mysqli_query($con, $sql);
       if ($result) {
         $_SESSION['status'] = "Time Expired.";
-        header("Location: login.php");
+        header("Location:login");
         exit(0);
       } else {
-        header("Location: login.php");
+        header("Location:login");
         exit(0);
       }
      
@@ -38,7 +38,7 @@ if (isset($_GET['token'])) {
   }
 } else {
   $_SESSION['status'] = "Password not Updated";
-  header('location:login.php');
+  header('location:login');
 }
 
 
@@ -92,7 +92,7 @@ if (isset($_POST['password_update'])) {
           if ($update_password_run) {
             $_SESSION['status'] = "Password Successfully Updated";
             send_mail($fname, $email, "changepassword",null,null);
-            header("Location: login.php");
+            header("Location:login");
             exit(0);
           } else {
             $_SESSION['status'] = "Did not update password, something went wrong.";

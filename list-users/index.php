@@ -1,17 +1,17 @@
 ﻿<?php
 session_start();
 if(!isset($_SESSION['loggedin']) || ($_SESSION['loggedin'])!=TRUE){
-	header("location: login.php");
+	header("location:../login");
 	exit;
 }
-include 'connect.php';
+include '../connect.php';
 
 $id=$_SESSION['id']; 
 $sq='select role_id from employees where id='.$id;
 $res=mysqli_query($con,$sq);
 $row=mysqli_fetch_array($res);
 if($row['role_id']!=1 && $row['role_id']!=5){
-	header("location: dashboard.php");
+	header("location:../dashboard");
 	exit;
 }
 // 	 Pagination
@@ -86,7 +86,7 @@ $i = $offset + 1;
 	<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-	<link href="css/dashboard.css" rel="stylesheet">
+	<link href="../css/dashboard.css" rel="stylesheet">
 
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -107,15 +107,15 @@ $i = $offset + 1;
 
 		</div>
 	</div>
-	<?php include "header.php";?>
+	<?php include "../header.php";?>
 	<div class="clear"></div>
 	<div class="clear"></div>
 	<div class="content">
 		<div class="wrapper">
 			<div class="bedcram">
 				<ul>
-					<li><a href="dashboard.php">Home</a></li>
-					<li><a href="list-users.php">List Users</a></li>
+					<li><a href="../dashboard">Home</a></li>
+					<li><a href="../list-users">List Users</a></li>
 				</ul>
 			</div>
 			<div class="left_sidebr">
@@ -174,17 +174,17 @@ $i = $offset + 1;
 							<!--<input type="submit" class="submit-btn" value="Search">-->
 							</form>
 						</div>
-						<a href="add-user.php" class="submit-btn add-user">Add More Users</a>
+						<a href="../add-user" class="submit-btn add-user">Add More Users</a>
 					</div>
 					<table width="100%" cellspacing="0">
 						<tbody>
 							<tr>
 								<th width="10px">Sr No.</th>
-								<th width="180px"><a href="<?php echo 'list-users.php?sort=fname&order=' . $new_order . '&search=' . $search ?> ">First Name <?php if($sort == 'fname'){ if($order=='asc'){ echo "<i class='fa-solid fa-arrow-down'></i> ";} else{ echo "<i class='fa-solid fa-arrow-up'></i>"; }} ?></a></th>
-								<th width="195x"><a href="<?php echo 'list-users.php?sort=lname&order=' . $new_order . '&search=' . $search ?> ">Last Name <?php if($sort == 'lname'){ if($order=='asc'){ echo "<i class='fa-solid fa-arrow-down'></i> ";} else{ echo "<i class='fa-solid fa-arrow-up'></i>"; }} ?></a></th>
-								<th width="120px"><a href="<?php echo 'list-users.php?sort=email&order=' . $new_order . '&search=' . $search ?> ">E-Mail <?php if($sort == 'email'){ if($order=='asc'){ echo "<i class='fa-solid fa-arrow-down'></i> ";} else{ echo "<i class='fa-solid fa-arrow-up'></i>"; }} ?></a></th>
-								<th width="110px"><a href="<?php echo 'list-users.php?sort=mobile&order=' . $new_order . '&search=' . $search ?> ">Mobile <?php if($sort == 'mobile'){ if($order=='asc'){ echo "<i class='fa-solid fa-arrow-down'></i> ";} else{ echo "<i class='fa-solid fa-arrow-up'></i>"; }} ?></a></th>
-								<th width="100px"><a href="<?php echo 'list-users.php?sort=role&order=' . $new_order . '&search=' . $search ?> ">Role <?php if($sort == 'role'){ if($order=='asc'){ echo "<i class='fa-solid fa-arrow-down'></i> ";} else{ echo "<i class='fa-solid fa-arrow-up'></i>"; }} ?></a></th>
+								<th width="180px"><a href="<?php echo '../list-users?sort=fname&order=' . $new_order . '&search=' . $search ?> ">First Name <?php if($sort == 'fname'){ if($order=='asc'){ echo "<i class='fa-solid fa-arrow-down'></i> ";} else{ echo "<i class='fa-solid fa-arrow-up'></i>"; }} ?></a></th>
+								<th width="195x"><a href="<?php echo '../list-users?sort=lname&order=' . $new_order . '&search=' . $search ?> ">Last Name <?php if($sort == 'lname'){ if($order=='asc'){ echo "<i class='fa-solid fa-arrow-down'></i> ";} else{ echo "<i class='fa-solid fa-arrow-up'></i>"; }} ?></a></th>
+								<th width="120px"><a href="<?php echo '../list-users?sort=email&order=' . $new_order . '&search=' . $search ?> ">E-Mail <?php if($sort == 'email'){ if($order=='asc'){ echo "<i class='fa-solid fa-arrow-down'></i> ";} else{ echo "<i class='fa-solid fa-arrow-up'></i>"; }} ?></a></th>
+								<th width="110px"><a href="<?php echo '../list-users?sort=mobile&order=' . $new_order . '&search=' . $search ?> ">Mobile <?php if($sort == 'mobile'){ if($order=='asc'){ echo "<i class='fa-solid fa-arrow-down'></i> ";} else{ echo "<i class='fa-solid fa-arrow-up'></i>"; }} ?></a></th>
+								<th width="100px"><a href="<?php echo '../list-users?sort=role&order=' . $new_order . '&search=' . $search ?> ">Role <?php if($sort == 'role'){ if($order=='asc'){ echo "<i class='fa-solid fa-arrow-down'></i> ";} else{ echo "<i class='fa-solid fa-arrow-up'></i>"; }} ?></a></th>
 								<th width="98px">Operation</th>
 							</tr>
 							<?php
@@ -199,8 +199,8 @@ $i = $offset + 1;
         <td>" . $row["mobile"] . "</td>
         <td>" . $row["role"] . "</td>
         <td> 
-		 <button><a href='update-user.php?u_id=$row[id]'><img src='images/edit-icon.png'></a></button>
-             <button onclick='myFunction($row[id])'><img src='images/cross.png'></button> 
+		 <button><a href='../edit-user?u_id=$row[id]'><img src='../images/edit-icon.png'></a></button>
+             <button onclick='myFunction($row[id])'><img src='../images/cross.png'></button> 
            
         </td>
         </tr>";
@@ -254,12 +254,12 @@ $i = $offset + 1;
 			<script>
 				function sortSelect() {
 					const value = document.getElementById(' sortInput').value
-					window.location.href = "http://localhost/HTML1/list-users.php?sort=" + value
+					window.location.href = "http://localhost/Employee_management/../list-users?sort=" + value
 				}
 
 				function myFunction(id) {
 					document.getElementById('modal').style.display = 'flex';
-					document.getElementById('dlt').href = "delete.php?deleteid=" + id;
+					document.getElementById('dlt').href = "../delete?deleteid=" + id;
 				}
 			</script>
 </body>

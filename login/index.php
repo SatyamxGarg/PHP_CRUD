@@ -1,13 +1,13 @@
 <?php
 
 
-include 'connect.php';
+include '../connect.php';
 $login = false;
 $showError = false;
 session_start();
 
 if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == TRUE){
-    header("location: dashboard.php");
+    header("location: ../dashboard");
     exit;
 }
 
@@ -28,7 +28,7 @@ if (isset($_POST['submit'])) {
         $_SESSION['email'] = $email;
         $_SESSION['fname'] = $row5['fname'];
         $_SESSION['id'] = $row5['id'];
-        header("location:dashboard.php");
+        header("location:../dashboard");
     } else {
         $showError = "Invalid credentials";
     }
@@ -45,7 +45,7 @@ if (isset($_POST['submit'])) {
     <title>Admin</title>
     <link rel="stylesheet" href="login.css">
     <!-- Bootstrap -->
-    <link href="css/dashboard.css" rel="stylesheet">
+    <link href="../css/dashboard.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -89,7 +89,7 @@ if (isset($_POST['submit'])) {
         <div class="wrapper relative">
             <div style="display:none" class="meassage_successful_login">You have Successfull Edit </div>
             <div class="heading-top">
-                <div class="logo-cebter"><a href="#"><img src="images/at your service_banner.png"></a></div>
+                <div class="logo-cebter"><a href="#"><img src="../images/at your service_banner.png"></a></div>
             </div>
             <?php if (isset($_SESSION['status'])) : ?>
             <div class="error-message-div error-msg" style="margin-bottom:10px;"><?php echo $_SESSION['status'];
@@ -102,10 +102,10 @@ if (isset($_POST['submit'])) {
                     
                     <?php
                     if ($login) {
-                        echo '<div class="error-message-div error-msg"><img src="images/sucess-msg.png"><strong>Success!!</strong>Sign-In Successfully</div>';
+                        echo '<div class="error-message-div error-msg"><img src="../images/sucess-msg.png"><strong>Success!!</strong>Sign-In Successfully</div>';
                     }
                     if ($showError) {
-                        echo '<div class="error-message-div error-msg"><img src="images/unsucess-msg.png"><strong>Invalid!</strong> username or password </div>';
+                        echo '<div class="error-message-div error-msg"><img src="../images/unsucess-msg.png"><strong>Invalid!</strong> username or password </div>';
                     }
                     ?>
                     <form name="loginForm" class="margin_bottom" role="form" method="POST" onsubmit=" return validateForm()">
@@ -120,8 +120,8 @@ if (isset($_POST['submit'])) {
                             <span id="passwordError" class="error"><?php echo isset($errors['password']) ? $errors['password'] : ''; ?></span>
                         </div>
                         <button type="submit" name="submit" class="btn_login">Login</button>
-                        <a href="forgetPassword.php" style="float:right">Forget Password?</a>
-                        <p id="signup">Don't have an account?<a href="signup.php"> signup</a></p>
+                        <a href="../forgetPassword.php" style="float:right">Forget Password?</a>
+                        <p id="signup">Don't have an account?<a href="../signup"> signup</a></p>
                     </form>
                 </div>
             </div>

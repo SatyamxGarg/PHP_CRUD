@@ -1,14 +1,14 @@
 ﻿<?php
 session_start();
 if (!isset($_SESSION['loggedin']) || ($_SESSION['loggedin']) != TRUE) {
-    header("location: login.php");
+    header("location: ../login");
     exit;
 }
 
 ?>
 
 <?php
-include 'connect.php';
+include '../connect.php';
 
 $grp = isset($_GET['val']) ? $_GET['val'] : '';
 
@@ -161,7 +161,7 @@ $w4 = mysqli_num_rows($result4);
     <title>Admin</title>
 
     <!-- Bootstrap -->
-    <link href="css/dashboard.css" rel="stylesheet">
+    <link href="../css/dashboard.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -188,15 +188,15 @@ $w4 = mysqli_num_rows($result4);
 </head>
 
 <body>
-    <?php include "header.php"; ?>
+    <?php include "../header.php"; ?>
     <div class="clear"></div>
     <div class="clear"></div>
     <div class="content">
         <div class="wrapper">
             <div class="left_sidebr">
                 <ul>
-                    <li><a href="dashboard.php" class="dashboard">Dashboard</a></li>
-                    <li><a href="list-users.php" class="user">Users</a>
+                    <li><a href="../dashboard" class="dashboard">Dashboard</a></li>
+                    <li><a href="../list-users" class="user">Users</a>
                         <ul class="submenu">
                             <li><a href="">Manage Users</a></li>
 
@@ -644,7 +644,7 @@ return [{
     <script>
         function filterData() {
             const selectFilter = document.getElementById('selectFilter').value;
-            window.location.href = "http://localhost/Employee_management/dashboard.php?val=" + selectFilter;
+            window.location.href = "http://localhost/Employee_management/dashboard?val=" + selectFilter;
         }
     </script>
 </body>

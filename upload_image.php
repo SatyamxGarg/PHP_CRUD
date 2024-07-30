@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['loggedin']) || ($_SESSION['loggedin']) != TRUE) {
-  header("location: login.php");
+  header("location:../login");
   exit;
 }
 
@@ -34,7 +34,7 @@ if (isset($_FILES['profile']) && $_FILES['profile']['error'] === UPLOAD_ERR_OK) 
       $stmt->execute();
 
       if ($stmt->affected_rows > 0) {
-     header("Location: myProfile.php");
+     header("Location:myProfile");
       } else {
         echo "Database update failed.";
       }
@@ -46,7 +46,7 @@ if (isset($_FILES['profile']) && $_FILES['profile']['error'] === UPLOAD_ERR_OK) 
     echo "Invalid file extension.";
   }
 } else {
-    header("Location: myProfile.php");
+    header("Location:myProfile");
 }
 
 $con->close();

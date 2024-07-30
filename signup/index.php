@@ -1,14 +1,14 @@
 ﻿<?php
-include 'mailTemplates.php';
+include '../mailTemplates.php';
 session_start();
 
 if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == TRUE){
-    header("location: dashboard.php");
+    header("location: ../dashboard");
     exit;
 }
     $showerror = false;
     $show_alert = false;
-    include 'connect.php';
+    include '../connect.php';
     $sql1="select * from Country";
     $result1 = mysqli_query($con, $sql1);
 
@@ -142,7 +142,7 @@ if (isset($_POST['submit'])) {
             $show_alert = true;
             $get_name=$fname;
             send_mail($get_name, $email, "signup",null,null);
-            header('location: login.php');
+            header('location:../login');
             exit(); 
             } else {
                 $showerror = true; 
@@ -161,9 +161,9 @@ if (isset($_POST['submit'])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Signup</title>
-    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="../login/login.css">
     <!-- Bootstrap -->
-    <link href="css/dashboard.css" rel="stylesheet">
+    <link href="../css/dashboard.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -171,7 +171,7 @@ if (isset($_POST['submit'])) {
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <link rel="stylesheet" type="text/css" href="css/dashboard.css">
+    <link rel="stylesheet" type="text/css" href="../css/dashboard.css">
 
     <script>
     function validateForm() {
@@ -314,7 +314,7 @@ if (isset($_POST['submit'])) {
 
 <div class="login_section">
     <div class="wrapper relative"><div style="display:none" class="meassage_successful_login">You have Successfull Edit </div>
-        <div class="heading-top"><div class="logo-cebter"><a href="#"><img src="images/at your service_banner.png"></a></div></div>
+        <div class="heading-top"><div class="logo-cebter"><a href="#"><img src="../images/at your service_banner.png"></a></div></div>
         <div class="box" style="height: 650px; width: 70%;">
         <div class="outer_div">
         
@@ -322,7 +322,7 @@ if (isset($_POST['submit'])) {
         <!-- <div class="error-message-div error-msg"></div> -->
                 <form class="margin_bottom" role="form" method="POST" action="" name="signupForm" onsubmit=" return validateForm()">
                 <div class="add-msgs" id="error-box">
-            <div class="error-message-div error-msg" id="msg" style="display:none"><img src="images/unsucess-msg.png"><strong>UnSucess!</strong> You
+            <div class="error-message-div error-msg" id="msg" style="display:none"><img src="../images/unsucess-msg.png"><strong>UnSucess!</strong> You
              have not been signed up </div>
             </div>
                     <div class="form-group">
@@ -472,7 +472,7 @@ if (isset($_POST['submit'])) {
                         <button type="submit" name="submit" class="btn_login">sign Up</button>
                 </form>
                 <div class="si-in">
-                <p id="login">Have an Account?<a href="login.php"> Login</a></p>
+                <p id="login">Have an Account?<a href="../login"> Login</a></p>
                 </div>
          </div>
         </div>
@@ -494,7 +494,7 @@ if (isset($_POST['submit'])) {
                 redirect: 'follow'
             };
 
-            fetch("getData.php/", requestOptions)
+            fetch("../getData.php/", requestOptions)
                 .then(response => {
                     
                     if (!response.ok) {
@@ -544,7 +544,7 @@ if (isset($_POST['submit'])) {
                 redirect: 'follow'
             };
 
-            fetch("getData2.php/", requestOptions)
+            fetch("../getData2.php/", requestOptions)
                 .then(response => {
                     
                     if (!response.ok) {

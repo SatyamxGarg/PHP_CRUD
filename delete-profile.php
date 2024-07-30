@@ -3,7 +3,7 @@
 session_start();
 
 if (!isset($_SESSION['loggedin']) || ($_SESSION['loggedin']) != TRUE) {
-    header("location: login.php");
+    header("location:login");
     exit;
 }
 
@@ -30,7 +30,7 @@ if (isset($_GET['deleteid'])) {
         mysqli_query($con, $sql);
 
        
-        header("Location: myProfile.php");
+        header("Location:myProfile");
         exit;
     } else {
         echo "Error: Profile not found.";
