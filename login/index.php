@@ -17,7 +17,7 @@ if (isset($_POST['submit'])) {
     $password = $_POST["password"];
 
     $hash_password = md5($password);
-    $sql = "SELECT * from employees where email='$email' AND password='$hash_password'";
+    $sql = "SELECT * from employees where email='$email' AND password='$hash_password' AND isdeleted!=1";
 
     $result = mysqli_query($con, $sql);
     $num = mysqli_num_rows($result);
@@ -120,7 +120,7 @@ if (isset($_POST['submit'])) {
                             <span id="passwordError" class="error"><?php echo isset($errors['password']) ? $errors['password'] : ''; ?></span>
                         </div>
                         <button type="submit" name="submit" class="btn_login">Login</button>
-                        <a href="../forgetPassword.php" style="float:right">Forget Password?</a>
+                        <a href="../forgetPassword" style="float:right">Forget Password?</a>
                         <p id="signup">Don't have an account?<a href="../signup"> signup</a></p>
                     </form>
                 </div>

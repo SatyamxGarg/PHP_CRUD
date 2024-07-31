@@ -14,7 +14,9 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == TRUE){
 
 // $sql3="select * from city";
 // $result3=mysqli_query($conn, $sql3);
-
+   $gender='';
+   $country='';
+   $state='';
 if (isset($_POST['submit'])) {
     $errors = [];
   
@@ -190,6 +192,7 @@ if (isset($_POST['submit'])) {
       var cpassword = document.forms["signupForm"]["cpassword"].value;
       var emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
       var passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      var mobilePattern = '/^[0-9]{10}+$/';
 
       document.getElementById("firstnameError").innerHTML = "";
       document.getElementById("lastnameError").innerHTML = "";
@@ -238,6 +241,11 @@ if (isset($_POST['submit'])) {
         document.getElementById("mobileError").innerHTML = "Mobile Number must be filled out.";
         isValid = false;
       }
+      else if (!mobile.match(mobilePattern)) {
+        document.getElementById("mobileError").innerHTML = "Please enter a valid mobile number.";
+        isValid = false;
+      }
+
 
       if (role == "") {
         document.getElementById("roleError").innerHTML = "Role must be filled out.";
@@ -351,10 +359,10 @@ if (isset($_POST['submit'])) {
 
 
                     <div class="form-group radio-row">
-             
-                    <label for="gender">Gender: <span>*</span></label>
+             <div> <label for="gender">Gender: <span>*</span></label></div>
+                   
             <div class="input-field" id="label-gender">
-        <label><input type="radio" name="gender" value="Male" > <span>Male </span></label><label> <input type="radio" name="gender" value="Female"> <span>Female</span> </label><br>
+        <label><input type="radio" name="gender" value="Male" <?php if($gender=='Male') { echo 'checked';}?> > <span>Male </span></label><label> <input type="radio" name="gender" value="Female" ?<?php if($gender=='Female') { echo 'checked';}?>> <span>Female</span> </label><br>
         <span id="genderError" class="error"><?php echo isset($errors['gender']) ? $errors['gender'] : ''; ?></span>
 
  </div>
@@ -407,7 +415,7 @@ if (isset($_POST['submit'])) {
         
               <div class="input-field">
                 <div class="select">
-                  <select name="country" class="country-info" id="countryId" style="width:640px" onchange="cntry_change()">
+                  <select name="country" class="country-info" id="countryId" style="width:640px" onchange="cntry_change()" value="<?php echo $country; ?>">
                     <option value="">Select Your Country</option>
                     <?php
                  $sql1 = "select *from Country";

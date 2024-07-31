@@ -3,8 +3,8 @@
 
 
 session_start();
-include 'connect.php';
-include 'mailTemplates.php';
+include '../connect.php';
+include '../mailTemplates.php';
 
 if (isset($_GET['token'])) {
   $token = $_GET['token'];
@@ -18,7 +18,7 @@ if (isset($_GET['token'])) {
   $time1 = time();
   if ($row <= 0) {
     $_SESSION['status'] = "Invalid URL.";
-    header("Location:login");
+    header("Location:../login");
   } else {
     $time_store = $data['token_startAT'];
     if ($time_store + (60 * 2) < $time1) {
@@ -26,10 +26,10 @@ if (isset($_GET['token'])) {
       $result = mysqli_query($con, $sql);
       if ($result) {
         $_SESSION['status'] = "Time Expired.";
-        header("Location:login");
+        header("Location:../login");
         exit(0);
       } else {
-        header("Location:login");
+        header("Location:../login");
         exit(0);
       }
      
@@ -38,7 +38,7 @@ if (isset($_GET['token'])) {
   }
 } else {
   $_SESSION['status'] = "Password not Updated";
-  header('location:login');
+  header('location:../login');
 }
 
 
@@ -92,11 +92,11 @@ if (isset($_POST['password_update'])) {
           if ($update_password_run) {
             $_SESSION['status'] = "Password Successfully Updated";
             send_mail($fname, $email, "changepassword",null,null);
-            header("Location:login");
+            header("Location:../login");
             exit(0);
           } else {
             $_SESSION['status'] = "Did not update password, something went wrong.";
-            header("Location: change-password.php");
+            header("Location: change-password");
             exit(0);
           }
         }
@@ -114,7 +114,7 @@ if (isset($_POST['password_update'])) {
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Admin</title>
-  <link href="css/dashboard.css" rel="stylesheet">
+  <link href="../css/dashboard.css" rel="stylesheet">
 
   <script>
     function validateForm() {
@@ -157,7 +157,7 @@ if (isset($_POST['password_update'])) {
     <div class="wrapper relative" style="height:300px">
       <div style="display:none" class="meassage_successful_login">You have Successfull Edit </div>
       <div class="heading-top">
-        <div class="logo-cebter"><a href="#"><img src="images/at your service_banner.png"></a></div>
+        <div class="logo-cebter"><a href="#"><img src="../images/at your service_banner.png"></a></div>
       </div>
       <div class="box" style="height:300px">
         <div class="pswd-div" style="padding:24px;">

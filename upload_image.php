@@ -8,6 +8,18 @@ if (!isset($_SESSION['loggedin']) || ($_SESSION['loggedin']) != TRUE) {
 include 'connect.php';
 $userId = $_SESSION['id'];
 
+$sql='select profile_image from employees where id='.$userId;
+$result = mysqli_query($con,$sql);
+$row = mysqli_fetch_array($result);
+if($row['profile_image']!=NULL){
+  $imagePath = 'upload/' . $row['profile_image'];
+
+      
+  if (file_exists($imagePath)) {
+      unlink($imagePath);
+  }
+}
+
 // Check if a file was uploaded
 if (isset($_FILES['profile']) && $_FILES['profile']['error'] === UPLOAD_ERR_OK) {
   $fileTmpPath = $_FILES['profile']['tmp_name'];

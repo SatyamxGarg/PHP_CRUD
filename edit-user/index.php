@@ -33,9 +33,18 @@ if(!isset($_SESSION['loggedin']) || ($_SESSION['loggedin'])!=TRUE){
     $email = $row['email'];
     $mobile = $row['mobile'];
     $role=$row['role_id'];
+    
     $country = $row['country'];
+    
+
     $state = $row['state'];
+    $sql2='select *from State';
+    $result2=mysqli_query($con,$sql2);
+  
     $city = $row['city'];
+    $sql3='select *from City';
+    $result3=mysqli_query($con,$sql3);
+ 
     $confirmation=$row['confirm'];
    
     
@@ -108,14 +117,14 @@ if(!isset($_SESSION['loggedin']) || ($_SESSION['loggedin'])!=TRUE){
         if (empty($_POST['state'])) {
           $errors['state'] = 'State name required';
       } else {
-          $country = $_POST['state'];
+          $state = $_POST['state'];
           
       }
   
       if (empty($_POST['city'])) {
         $errors['city'] = 'City name required';
     } else {
-        $country = $_POST['city'];
+        $city = $_POST['city'];
        
     }
    
@@ -334,17 +343,19 @@ if(!isset($_SESSION['loggedin']) || ($_SESSION['loggedin'])!=TRUE){
               </div>
               <div class="input-field">
                 <div class="select">
-                  <select name="country" class="country-info" id="countryId" value="<?php echo $country; ?>" onchange="cntry_change()">
+                  <select name="country" class="country-info" id="countryId" onchange="cntry_change()" value="<?php echo $country; ?>" >
                     <option value="">Select Your Country</option>
                     <?php
-                 $sql1 = "select *from Country";
-                 $result1 = $con->query($sql1);
-                    while ($row1 = mysqli_fetch_array($result1)) {
-                      if ($country == $row1['id']) {
-                        echo "<option selected value='$row1[id]'>$row1[c_name]</option>";
+                    $sql1='select *from Country';
+                    $result1=mysqli_query($con,$sql1);                 
+                    while($row11= mysqli_fetch_array($result1)) {
+                     
+                      if($country == $row11['c_name']) {
+                        echo "<option selected value='$country'>$country</option>";
+                       
                       }
                       else{
-                        echo "<option value='$row1[id]'>$row1[c_name]</option>";
+                        echo "<option value='$row11[c_name]'>$row11[c_name]</option>";
                       }
                     }
                     ?>
@@ -362,8 +373,23 @@ if(!isset($_SESSION['loggedin']) || ($_SESSION['loggedin'])!=TRUE){
               </div>
               <div class="input-field">
                 <div class="select">
-                <select disabled name="state" class="countries form-control" id="stateId" onclick="state_change()">
+                <select name="state" class="countries form-control" id="stateId"  onchange="state_change()" value="<?php echo $state; ?>">
                                 <option value="null">Select State</option>
+                               
+                                <?php
+                                
+                
+                    while ($row12 = mysqli_fetch_array($result2)) {
+                     
+                      if ($state == $row12['state_name']) {
+                        echo "<option selected value='$row12[state_name]'>$row12[state_name]</option>";
+                        
+                      }
+                      else{
+                        echo "<option value='$row12[state_name]'>$row12[state_name]</option>";
+                      }
+                    }
+                    ?>
                                
                             </select>
                   <span id="stateError" class="error"><?php echo isset($errors['state']) ? $errors['state'] : ''; ?></span>
@@ -377,9 +403,19 @@ if(!isset($_SESSION['loggedin']) || ($_SESSION['loggedin'])!=TRUE){
               </div>
               <div class="input-field">
                 <div class="select">
-                <select disabled name="city" class="countries form-control" id="cityId">
-                                <option value="null">Select City</option>
-                                
+                <select name="city" class="countries form-control" id="cityId" value="<?php echo $city; ?>">
+                                <option value="">Select City</option>
+                                <?php
+                
+                    while ($row13  = mysqli_fetch_array($result3)) {
+                      if ($city == $row13['city_name']) {
+                        echo "<option selected value='$row13[city_name]'>$row13[city_name]</option>";
+                      }
+                      else{
+                        echo "<option value='$row13[city_name]'>$row13[city_name]</option>";
+                      }
+                    }
+                    ?>
                             </select>
                   <span id="cityError" class="error"><?php echo isset($errors['city']) ? $errors['city'] : ''; ?></span>
                 </div>
@@ -404,7 +440,7 @@ if(!isset($_SESSION['loggedin']) || ($_SESSION['loggedin'])!=TRUE){
                 <label>Confirm Password: <span>*</span></label>
               </div>
               <div class="input-field">
-                <input type="password" class="search-box" name="cpassword" placeholder="Retype Password" value="<?php echo isset($cpassword) ? $cpassword : ''; ?>" />
+                <input type="password" class="search-box" name="cpassword" placeholder="Retype Password" />
                 <span id="cpasswordError" class="error"><?php echo isset($errors['cpassword']) ? $errors['cpassword'] : ''; ?></span>
               </div>
             </div>
@@ -491,8 +527,9 @@ if(!isset($_SESSION['loggedin']) || ($_SESSION['loggedin'])!=TRUE){
         }
 
         function state_change() {
+          console.log("wjkq lksjl");
             const stateId = document.getElementById('stateId').value;
-            document.getElementById('cityId').removeAttribute("disabled");
+             document.getElementById('cityId').removeAttribute("disabled");
             const requestOptions = {
                 method: 'POST',
                 headers: {

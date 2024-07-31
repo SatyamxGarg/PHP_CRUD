@@ -120,7 +120,7 @@ $i = $offset + 1;
 			</div>
 			<div class="left_sidebr">
 				<ul>
-					<li><a href="" class="dashboard">Dashboard</a></li>
+					<li><a href="../dashboard" class="dashboard">Dashboard</a></li>
 					<li><a href="" class="user">Users</a>
 						<ul class="submenu">
 							<li><a href="">Mange Users</a></li>
@@ -188,7 +188,7 @@ $i = $offset + 1;
 								<th width="98px">Operation</th>
 							</tr>
 							<?php
-
+								if($total_records>=1){
 							while ($row = mysqli_fetch_array($result)) {
 								
 								echo "
@@ -205,6 +205,9 @@ $i = $offset + 1;
         </td>
         </tr>";
 								$i++;
+							}}
+							else{
+								echo "<td colspan='7'> No Record Found</td>";
 							}
 							?>
 						</tbody>

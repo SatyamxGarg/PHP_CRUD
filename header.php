@@ -1,6 +1,6 @@
 <div class="header">
     <div class="wrapper">
-        <div class="logo"><a href="#"><img src="../images/logo.png"></a></div>
+        <div class="logo"><img src="../images/logo.png"></div>
 
 
         <div class="right_side">
@@ -11,13 +11,23 @@
         </div>
         <div class="nav_top">
             <ul>
-                <li><a href=" ../dashboard ">Dashboard</a></li>
-                <li><a href="../list-users">Users</a></li>
-                <li><a href=" agentloclist.php ">Setting</a></li>
-                <li><a href=" geoloclist.php ">Configuration</a></li>
-                <li><a href="../myProfile">My Profile</a></li>
+                <li id="dashboard"><a href=" ../dashboard ">Dashboard</a></li>
+                <li id="listUsers"><a href="../list-users">Users</a></li>
+             
+                <li id="myProfile"><a href="../myProfile">My Profile</a></li>
             </ul>
 
         </div>
     </div>
 </div>
+<script> 
+     if(window.location.pathname.includes('dashboard')){
+    document.getElementById('dashboard').className="active";
+    }
+    else if(window.location.pathname.includes('list-users')){
+    document.getElementById('listUsers').className="active";
+    }
+    else if(window.location.pathname.includes('myProfile')){
+    document.getElementById('myProfile').className="active";
+    }
+</script>
