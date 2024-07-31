@@ -9,13 +9,11 @@ if ($requestMethod === 'POST') {
     echo json_encode(['error' => 'Unsupported request method']);
 }
 
-
 function handlePostRequest() {
-    // Read the raw POST data
-    include 'connect.php';
+    
     $data = file_get_contents('php://input');
 
-    // Decode the JSON data to get the countryId
+   
     $decodedData = json_decode($data, true);
 
     if (json_last_error() !== JSON_ERROR_NONE) {
@@ -26,22 +24,37 @@ function handlePostRequest() {
     if (isset($decodedData['countryId'])) {
         $countryId = $decodedData['countryId'];
         
-        $sql = "select * from State where cntry_id= $countryId ";
-        $result1 = $con->query($sql);
+        
+        include 'connect.php';
 
-        $arr = [];
+        
+        $stmt = $con->prepare("SELECT * FROM Country WHERE c_name = ?");
+        $stmt->bind_param("s", $countryId); 
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-        while ($row = $result1->fetch_assoc()) {
-            $arr[] = [
-                'id' => $row['id'],
-                'cntry_id' => $row['cntry_id'],
-                'state_name' => $row['state_name'],
-            ];
+        if ($row = $result->fetch_assoc()) {
+            $c_id = $row['id'];
+
+            
+            $stmt = $con->prepare("SELECT * FROM State WHERE cntry_id = ?");
+            $stmt->bind_param("i", $c_id); 
+            $stmt->execute();
+            $result1 = $stmt->get_result();
+
+            $arr = [];
+            while ($row = $result1->fetch_assoc()) {
+                $arr[] = [
+                    'id' => $row['id'],
+                    'cntry_id' => $row['cntry_id'],
+                    'state_name' => $row['state_name'],
+                ];
+            }
+
+            echo json_encode($arr);
+        } else {
+            echo json_encode(['error' => 'Country not found']);
         }
-
-
-
-        echo json_encode($arr);
     } else {
         echo json_encode(['error' => 'countryId not provided']);
     }

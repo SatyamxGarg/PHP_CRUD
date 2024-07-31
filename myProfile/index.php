@@ -54,6 +54,17 @@ $city = $row['city'];
 </head>
 
 <body>
+<div class="pop-outer" id="modal">
+		<div class="box-dlt">
+			<h2>Would you like to delete image?</h2>
+
+			<div class="outer-popdlt">
+				<a class="btn-pop" id="dlt">Delete</a>
+				<button id="can" onclick="document.getElementById('modal').style.display= 'none';">Cancel</button>
+			</div>
+
+		</div>
+	</div>
   <?php include "../header.php"; ?>
   <div class="clear"></div>
   <div class="clear"></div>
@@ -62,7 +73,7 @@ $city = $row['city'];
       <div class="bedcram">
         <ul>
           <li><a href="../dashboard">Home</a></li>
-          <li><a href="../list-users">List Users</a></li>
+          <!-- <li><a href="../list-users">List Users</a></li> -->
           <li>My Profile</li>
         </ul>
       </div>
@@ -113,7 +124,7 @@ $city = $row['city'];
                 <!-- <button type="submit" name="upload" class='submit-btn'>Upload Image</button> -->
               </form>
               <?php
-             echo " <button><a href='../delete-profile.php?deleteid=$row[id]'><i id='profile-dlt'class='fa-solid fa-trash'></i></a></button> "?>
+             echo " <button onclick='myFunction($row[id])'><i id='profile-dlt'class='fa-solid fa-trash'></i></button> "?>
            
             </div>
             <div class="info-bar">
@@ -187,6 +198,11 @@ $city = $row['city'];
       document.getElementById("image-form").submit()
 
     }
+
+    function myFunction(id) {
+					document.getElementById('modal').style.display = 'flex';
+					document.getElementById('dlt').href = "../delete-profile.php?deleteid=" + id;
+				}
   </script>
 </body>
 

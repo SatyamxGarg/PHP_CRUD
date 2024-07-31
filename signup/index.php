@@ -438,7 +438,7 @@ if (isset($_POST['submit'])) {
                 <label for="state">State: <span>*</span> </label>
               <div class="input-field">
                 <div class="select">
-                <select disabled name="state" class="countries form-control" id="stateId" style="width:640px" onclick="state_change()">
+                <select disabled name="state" class="countries form-control" id="stateId" style="width:640px" onclick="state_change()" value="<?php echo $state; ?>">
                                 <option value="null">Select State</option>
                                
                             </select>
@@ -451,7 +451,7 @@ if (isset($_POST['submit'])) {
                 <label for="city">City: <span>*</span> </label>
               <div class="input-field">
                 <div class="select">
-                <select disabled name="city" class="countries form-control" style="width:640px" id="cityId">
+                <select disabled name="city" class="countries form-control" style="width:640px" id="cityId" value="<?php echo $city; ?>">
                                 <option value="null">Select City</option>
                                 
                             </select>
@@ -464,7 +464,7 @@ if (isset($_POST['submit'])) {
             <div class="form-group">
                 <label for="password">Password: <span>*</span></label>
               <div class="input-field">
-                <input type="password" class="search-box" name="password" placeholder="Enter Password" style="width:640px" value="<?php echo isset($password) ? $password : ''; ?>" />
+                <input type="password" class="search-box" name="password" placeholder="Enter Password" style="width:640px"/>
                 <span id="passwordError" class="error"><?php echo isset($errors['password']) ? $errors['password'] : ''; ?></span>
               </div>
             </div>

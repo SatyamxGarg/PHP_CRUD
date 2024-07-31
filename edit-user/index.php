@@ -37,7 +37,7 @@ if(!isset($_SESSION['loggedin']) || ($_SESSION['loggedin'])!=TRUE){
     $country = $row['country'];
     
 
-    $state = $row['state'];
+    $state = $row['state']; 
     $sql2='select *from State';
     $result2=mysqli_query($con,$sql2);
   
@@ -118,13 +118,22 @@ if(!isset($_SESSION['loggedin']) || ($_SESSION['loggedin'])!=TRUE){
           $errors['state'] = 'State name required';
       } else {
           $state = $_POST['state'];
-          
+        
+          $q1="select state_name from State where id=$state";
+          $r=mysqli_query($con,$q1);
+          $r=mysqli_fetch_array($r);
+          $state=$r['state_name'];
       }
   
       if (empty($_POST['city'])) {
         $errors['city'] = 'City name required';
     } else {
         $city = $_POST['city'];
+
+        $q1="select city_name from City where id=$city";
+        $r=mysqli_query($con,$q1);
+        $r=mysqli_fetch_array($r);
+        $city=$r['city_name'];
        
     }
    
@@ -197,7 +206,7 @@ if(!isset($_SESSION['loggedin']) || ($_SESSION['loggedin'])!=TRUE){
       <div class="bedcram">
         <ul>
           <li><a href="../dashboard">Home</a></li>
-          <li><a href="../list-users ">List Users</a></li>
+          <!-- <li><a href="../list-users ">List Users</a></li> -->
           <li>Update User</li>
         </ul>
       </div>
@@ -373,7 +382,7 @@ if(!isset($_SESSION['loggedin']) || ($_SESSION['loggedin'])!=TRUE){
               </div>
               <div class="input-field">
                 <div class="select">
-                <select name="state" class="countries form-control" id="stateId"  onchange="state_change()" value="<?php echo $state; ?>">
+                <select disabled name="state" class="countries form-control" id="stateId"  onchange="state_change()" value="<?php echo $state; ?>">
                                 <option value="null">Select State</option>
                                
                                 <?php
@@ -403,7 +412,7 @@ if(!isset($_SESSION['loggedin']) || ($_SESSION['loggedin'])!=TRUE){
               </div>
               <div class="input-field">
                 <div class="select">
-                <select name="city" class="countries form-control" id="cityId" value="<?php echo $city; ?>">
+                <select disabled name="city" class="countries form-control" id="cityId" value="<?php echo $city; ?>">
                                 <option value="">Select City</option>
                                 <?php
                 
@@ -489,7 +498,7 @@ if(!isset($_SESSION['loggedin']) || ($_SESSION['loggedin'])!=TRUE){
                 redirect: 'follow'
             };
 
-            fetch("../getData.php/", requestOptions)
+            fetch("../fetchData.php/", requestOptions)
                 .then(response => {
                     
                     if (!response.ok) {
