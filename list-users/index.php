@@ -180,8 +180,8 @@ $i = $offset + 1;
 						<tbody>
 							<tr>
 								<th width="10px">Sr No.</th>
-								<th width="180px"><a href="<?php echo '../list-users?sort=fname&order=' . $new_order . '&search=' . $search ?> ">First Name <?php if($sort == 'fname'){ if($order=='asc'){ echo "<i class='fa-solid fa-arrow-down'></i> ";} else{ echo "<i class='fa-solid fa-arrow-up'></i>"; }} ?></a></th>
-								<th width="195x"><a href="<?php echo '../list-users?sort=lname&order=' . $new_order . '&search=' . $search ?> ">Last Name <?php if($sort == 'lname'){ if($order=='asc'){ echo "<i class='fa-solid fa-arrow-down'></i> ";} else{ echo "<i class='fa-solid fa-arrow-up'></i>"; }} ?></a></th>
+								<th width="200px"><a href="<?php echo '../list-users?sort=fname&order=' . $new_order . '&search=' . $search ?> ">First Name <?php if($sort == 'fname'){ if($order=='asc'){ echo "<i class='fa-solid fa-arrow-down'></i> ";} else{ echo "<i class='fa-solid fa-arrow-up'></i>"; }} ?></a></th>
+								<th width="220x"><a href="<?php echo '../list-users?sort=lname&order=' . $new_order . '&search=' . $search ?> ">Last Name <?php if($sort == 'lname'){ if($order=='asc'){ echo "<i class='fa-solid fa-arrow-down'></i> ";} else{ echo "<i class='fa-solid fa-arrow-up'></i>"; }} ?></a></th>
 								<th width="120px"><a href="<?php echo '../list-users?sort=email&order=' . $new_order . '&search=' . $search ?> ">E-Mail <?php if($sort == 'email'){ if($order=='asc'){ echo "<i class='fa-solid fa-arrow-down'></i> ";} else{ echo "<i class='fa-solid fa-arrow-up'></i>"; }} ?></a></th>
 								<th width="110px"><a href="<?php echo '../list-users?sort=mobile&order=' . $new_order . '&search=' . $search ?> ">Mobile <?php if($sort == 'mobile'){ if($order=='asc'){ echo "<i class='fa-solid fa-arrow-down'></i> ";} else{ echo "<i class='fa-solid fa-arrow-up'></i>"; }} ?></a></th>
 								<th width="100px"><a href="<?php echo '../list-users?sort=role&order=' . $new_order . '&search=' . $search ?> ">Role <?php if($sort == 'role'){ if($order=='asc'){ echo "<i class='fa-solid fa-arrow-down'></i> ";} else{ echo "<i class='fa-solid fa-arrow-up'></i>"; }} ?></a></th>

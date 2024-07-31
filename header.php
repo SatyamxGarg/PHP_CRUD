@@ -5,7 +5,7 @@
 
         <div class="right_side">
             <ul>
-                <li>Welcome <?php echo $_SESSION["fname"]; ?></li>
+                <li><a href="../myProfile">Welcome <?php echo $_SESSION["fname"]; ?></a></li>
                 <li><a href="../logout">Log Out</a></li>
             </ul>
         </div>
