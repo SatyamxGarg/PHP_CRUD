@@ -46,9 +46,7 @@ $result2 = mysqli_query($con, $sql2);
 $user_city = $row['user_city'];
 $sql3 = 'select * from em_cities';
 $result3 = mysqli_query($con, $sql3);
-echo $user_country;
-echo $user_state;
-echo $user_city;
+
 
 $confirmation = $row['user_confirm'];
 

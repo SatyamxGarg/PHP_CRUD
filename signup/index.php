@@ -116,7 +116,11 @@ if (isset($_POST['submit'])) {
   $get_state = "select state_name from em_states where state_id=$state_id";
   $result =  mysqli_query($con, $get_state);
   $row= mysqli_fetch_array($result);
-  $user_state = $row['state_name'];
+  if(mysqli_num_rows($result)> 0){
+  $user_state = $row['state_name'];}
+  else{
+    $errors['state']= 'State name required';
+  }
   }
   
   if(empty($_POST['city'])){
@@ -127,7 +131,11 @@ if (isset($_POST['submit'])) {
   $get_city = "select city_name from em_cities where city_id=$user_city_id";
   $result =  mysqli_query($con, $get_city);
   $row= mysqli_fetch_array($result);
-  $user_city = $row['city_name'];
+  if(mysqli_num_rows($result)> 0){
+  $user_city = $row['city_name'];}
+  else{
+    $errors['city']='City name required';
+  }
   }
   
     $user_createdAt = time();
@@ -334,7 +342,7 @@ if (isset($_POST['submit'])) {
              have not been signed up </div>
             </div>
                     <div class="form-group">
-                        <label for="fname">Firstname: <span>*</span></label>
+                        <label for="fname">Firstname: <span style="color:red;">*</span></label>
                         <div class="input-field">
                 <input type="text" class="search-box" name="user_first_name" placeholder="Enter First Name" style="width:640px" value="<?php echo isset($user_first_name) ? $user_first_name : ''; ?>" />
                 <span id="firstnameError" class="error"><?php echo isset($errors['user_first_name']) ? $errors['user_first_name'] : ''; ?></span>
@@ -342,7 +350,7 @@ if (isset($_POST['submit'])) {
                     </div>
 
                     <div class="form-group">
-                        <label for="user_last_name">Lastname: <span>*</span></label>
+                        <label for="user_last_name">Lastname: <span style="color:red;">*</span></label>
                         <div class="input-field">
                 <input type="text" class="search-box" name="user_last_name" placeholder="Enter Last Name" style="width:640px" value="<?php echo isset($user_last_name) ? $user_last_name : ''; ?>" />
                 <span id="lastnameError" class="error"><?php echo isset($errors['user_last_name']) ? $errors['user_last_name'] : ''; ?></span>
@@ -350,7 +358,7 @@ if (isset($_POST['submit'])) {
                     </div>
 
                     <div class="form-group">
-                    <label for="lname">Age: <span>*</span></label>
+                    <label for="lname">Age:<span style="color:red;">*</span></label>
                     <div class="input-field">
                 <input type="text" class="search-box" name="age" placeholder="Enter Age" style="width:640px" value="<?php echo isset($user_age) ? $user_age : ''; ?>" />
                 <span id="ageError" class="error"><?php echo isset($errors['age']) ? $errors['age'] : ''; ?></span>
@@ -359,7 +367,7 @@ if (isset($_POST['submit'])) {
 
 
                     <div class="form-group radio-row">
-             <div> <label for="gender">Gender: <span>*</span></label></div>
+             <div> <label for="gender">Gender: <span style="color:red;">*</span></label></div>
                    
             <div class="input-field" id="label-gender">
         <label><input type="radio" name="gender" value="Male" <?php if($user_gender=='Male') { echo 'checked';}?> > <span>Male </span></label><label> <input type="radio" name="gender" value="Female" ?<?php if($user_gender=='Female') { echo 'checked';}?>> <span>Female</span> </label><br>
@@ -369,7 +377,7 @@ if (isset($_POST['submit'])) {
  </div>
 
                          <div class="form-group">
-                        <label for="email">Email: <span>*</span></label>
+                        <label for="email">Email: <span style="color:red;">*</span></label>
                         <div class="input-field">
                 <input type="text" class="search-box" name="email" style="width:640px" placeholder="Enter Email" value="<?php echo isset($user_email) ? $user_email : ''; ?>" />
                 <span id="emailError" class="error"><?php echo isset($errors['email']) ? $errors['email'] : ''; ?></span>
@@ -378,7 +386,7 @@ if (isset($_POST['submit'])) {
 
 
                     <div class="form-group">
-                        <label for="mobile">Mobile: <span>*</span></label>
+                        <label for="mobile">Mobile: <span style="color:red;">*</span></label>
                         <div class="input-field">
                 <input type="text" class="search-box" name="mobile" placeholder="Enter Mobile No." style="width:640px" value="<?php echo isset($user_phone) ? $user_phone : ''; ?>" />
                 <span id="mobileError" class="error"><?php echo isset($errors['mobile']) ? $errors['mobile'] : ''; ?></span>
@@ -386,7 +394,7 @@ if (isset($_POST['submit'])) {
                     </div>
 
                     <div class="form-group">
-                <label for="role">Role: <span>*</span></label>
+                <label for="role">Role: <span style="color:red;">*</span></label>
               
               <div class="input-field">
                 <div class="select">
@@ -399,7 +407,14 @@ if (isset($_POST['submit'])) {
                       if($user_role_id==$row1['role_id']){
                         echo "<option selected value='$row1[role_id]'>$row1[role_name]</option>";
                       }
-                      echo "<option value='$row1[role_id]'>$row1[role_name]</option>";
+                      else{
+                        if($row1['role_id']==2){
+                          echo "<option selected value='$row1[role_id]'>$row1[role_name]</option>";
+                        }
+                        else{
+                        echo "<option value='$row1[role_id]'>$row1[role_name]</option>";
+                      }
+                      } 
                     }
                     ?>
                   </select>
@@ -410,8 +425,9 @@ if (isset($_POST['submit'])) {
             </div> 
 
 
-            <div class="form-group">
-                <label for="country">Country: <span>*</span> </label>
+            
+                <div class="form-group">
+                <label for="country">Country: <span style="color:red;">*</span> </label>
         
               <div class="input-field">
                 <div class="select">
@@ -435,7 +451,7 @@ if (isset($_POST['submit'])) {
             </div>
 
             <div class="form-group">
-                <label for="state">State: <span>*</span> </label>
+                <label for="state">State: <span style="color:red;">*</span> </label>
               <div class="input-field">
                 <div class="select">
                 <select disabled name="state" class="countries form-control" id="stateId" style="width:640px" onclick="state_change()" value="<?php echo $user_state; ?>">
@@ -448,7 +464,7 @@ if (isset($_POST['submit'])) {
             </div>
 
             <div class="form-group">
-                <label for="city">City: <span>*</span> </label>
+                <label for="city">City:<span style="color:red;">*</span> </label>
               <div class="input-field">
                 <div class="select">
                 <select disabled name="city" class="countries form-control" style="width:640px" id="cityId" value="<?php echo $user_city; ?>">
@@ -462,7 +478,7 @@ if (isset($_POST['submit'])) {
 
 
             <div class="form-group">
-                <label for="password">Password: <span>*</span></label>
+                <label for="password">Password: <span style="color:red;">*</span></label>
               <div class="input-field">
                 <input type="password" class="search-box" name="password" placeholder="Enter Password" style="width:640px"/>
                 <span id="passwordError" class="error"><?php echo isset($errors['password']) ? $errors['password'] : ''; ?></span>
@@ -471,7 +487,7 @@ if (isset($_POST['submit'])) {
                  
                     
                     <div class="form-group">
-                        <label for="c_password">Confirm Password: <span>*</span></label>
+                        <label for="c_password">Confirm Password: <span style="color:red;">*</span></label>
                         <div class="input-field">
                 <input type="password" class="search-box" name="cpassword" style="width:640px" placeholder="Retype Password"  />
                 <span id="cpasswordError" class="error"><?php echo isset($errors['cpassword']) ? $errors['cpassword'] : ''; ?></span>

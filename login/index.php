@@ -111,12 +111,12 @@ if (isset($_POST['submit'])) {
                     ?>
                     <form novalidate name="loginForm" class="margin_bottom" role="form" method="POST" onsubmit=" return validateForm()">
                         <div class="form-group">
-                            <label for="email">E-mail</label>
+                            <label for="email">E-mail <span style="color:red;">*</span></label>
                             <input type="email" class="form-control" id="email" name="user_email" value="<?php echo isset($user_email) ? $user_email : ''; ?>" />
                             <span id="user_emailError" class="error"><?php echo isset($errors['user_email']) ? $errors['user_email'] : ''; ?></span>
                         </div>
                         <div class="form-group">
-                            <label for="password">Password</label>
+                            <label for="password">Password <span style="color:red;">*</span></label>
                             <input type="password" class="form-control" id="password" name="user_password" />
                             <span id="user_passwordError" class="error"><?php echo isset($errors['user_password']) ? $errors['user_password'] : ''; ?></span>
                         </div>

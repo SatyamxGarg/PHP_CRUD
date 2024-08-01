@@ -172,13 +172,13 @@ if (isset($_POST['password_update'])) {
                                                               } ?>">
 
 
-            <div class="form-group">
-              <label for="new_password">Password</label>
+            <div class="form-group" style="margin-top:10px;">
+              <label for="new_password">Password <span style="color:red;">*</span></label>
               <input type="password" class="form-control" name="new_password" placeholder="Enter New Password" />
               <span id="passwordError" class="error"><?php echo isset($errors['new_password']) ? $errors['new_password'] : ''; ?></span>
             </div>
             <div class="form-group">
-              <label for="confirm_password">Confirm Password</label>
+              <label for="confirm_password">Confirm Password <span style="color:red;">*</span></label>
               <input type="password" class="form-control" name="confirm_password" placeholder="Confirm Password" />
               <span id="cpasswordError" class="error"><?php echo isset($errors['confirm_password']) ? $errors['confirm_password'] : ''; ?></span>
             </div>

@@ -9,7 +9,7 @@ if(isset($_SESSION['loggedin']) && ($_SESSION['loggedin'])==TRUE){
   }
 
 if (isset($_POST['reset_password'])) {
-        $user_email = mysqli_real_escape_string($con, $_POST['email']);
+        $user_email = mysqli_real_escape_string($con, $_POST['user_email']);
         $token = md5(rand());
     
         $check_email = "SELECT user_email, user_first_name,user_id FROM em_users WHERE user_email = '$user_email' AND user_isDeleted!=1 LIMIT 1";
@@ -51,6 +51,25 @@ if (isset($_POST['reset_password'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Admin</title>
     <link href="../css/dashboard.css" rel="stylesheet">
+    <script>
+    function validateForm() {
+      var isValid = true;
+
+      var user_email = document.forms["emailForm"]["user_email"].value;
+      var user_emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+
+      document.getElementById("emailError").innerHTML = "";
+
+      if (user_email == "") {
+        document.getElementById("emailError").innerHTML = "Email must be filled out.";
+        isValid = false;
+      } else if (!user_email.match(user_emailPattern)) {
+        document.getElementById("emailError").innerHTML = "Please enter a valid email address.";
+        isValid = false;
+      }
+      return isValid;
+    }
+    </script>
 </head>
 
 <body>
@@ -67,12 +86,12 @@ if (isset($_POST['reset_password'])) {
             <div class="error-message-div error-msg"><?php echo $_SESSION['status'];
                                                       unset($_SESSION['status']); ?></div>
           <?php endif; ?>
-          <form novalidate class="margin_bottom" role="form" method="POST">
+          <form novalidate class="margin_bottom" role="form" method="POST" name="emailForm" onsubmit=" return validateForm()">
            
             <div class="form-group">
-              <label for="e-mail">Email: *</label>
-              <input type="email" class="form-control" name="email" placeholder="Enter Email Id..." />
-            
+              <label for="e-mail">Email: <span style="color:red;">*</span></label>
+              <input type="email" class="form-control" name="user_email" placeholder="Enter Email Id..." />
+              <span id="emailError" class="error"><?php echo isset($errors['user_email']) ? $errors['user_email'] : ''; ?></span>
             </div>
           
             <button class="submit-btn" type="submit" name="reset_password">Submit</button>

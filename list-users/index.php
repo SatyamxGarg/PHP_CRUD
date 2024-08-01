@@ -207,7 +207,7 @@ $i = $offset + 1;
 								$i++;
 							}}
 							else{
-								echo "<td colspan='7'> No Record Found</td>";
+								echo "<td colspan='7'><center> No Record Found</center></td>";
 							}
 							?>
 						</tbody>
