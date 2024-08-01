@@ -969,6 +969,18 @@ td button{
 }
 
 
+.pagination-div .pagination-current {
+ 
+  color: #fff;
+  background-color: #FF651B;
+  
+}
+
+.pagination-div .pagination-disabled {
+  color: #6c757d;
+  cursor: not-allowed;
+}
+
 .pagination-div {
   display: flex;
   justify-content: center;

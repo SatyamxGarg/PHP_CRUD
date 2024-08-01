@@ -1,183 +1,183 @@
 <?php
 
 session_start();
-if(!isset($_SESSION['loggedin']) || ($_SESSION['loggedin'])!=TRUE){
+if (!isset($_SESSION['loggedin']) || ($_SESSION['loggedin']) != TRUE) {
   header("location:../login");
   exit;
 }
-    include '../connect.php';
+include '../connect.php';
 
-    $myID=$_SESSION['id'];
-    $sq='select role_id from employees where id='.$myID;
-    $res=mysqli_query($con,$sq);
-    $row1=mysqli_fetch_array($res);
-
-    
+$myID = $_SESSION['user_id'];
+$sq = 'select user_role_id from em_users where user_id=' . $myID;
+$res = mysqli_query($con, $sq);
+$row1 = mysqli_fetch_array($res);
 
 
-    $id = $_GET["u_id"];
-    $sql = "select *from employees where id=$id";
-    $result = mysqli_query($con, $sql);
-    $row = mysqli_fetch_array($result);
 
 
-    if($row1['role_id']!=1 && $row1['role_id']!=5 && $myID!=$row['id']){
-      header("location: ../dashboard");
-      exit;
+$id = $_GET["u_id"];
+$sql = "select *from em_users where user_id=$id";
+$result = mysqli_query($con, $sql);
+$row = mysqli_fetch_array($result);
+
+
+if ($row1['user_role_id'] != 1 && $row1['user_role_id'] != 5 && $myID != $row['user_id']) {
+  header("location: ../dashboard");
+  exit;
+}
+
+$user_first_name = $row['user_first_name'];
+$user_last_name = $row['user_last_name'];
+$user_age = $row['user_age'];
+$user_gender = $row['user_gender'];
+$user_email = $row['user_email'];
+$user_phone = $row['user_phone'];
+$user_role_id = $row['user_role_id'];
+
+$user_country = $row['user_country'];
+
+
+$user_state = $row['user_state'];
+
+// echo $user_state;
+$sql2 = 'select * from em_states  ';
+$result2 = mysqli_query($con, $sql2);
+
+$user_city = $row['user_city'];
+$sql3 = 'select * from em_cities';
+$result3 = mysqli_query($con, $sql3);
+echo $user_country;
+echo $user_state;
+echo $user_city;
+
+$confirmation = $row['user_confirm'];
+
+
+
+if (isset($_POST['submit'])) {
+  $errors = [];
+  if (empty($_POST['user_first_name'])) {
+    $errors["user_first_name"] = "First name is required.";
+  } else {
+    $user_first_name = $_POST['user_first_name'];
+  }
+
+  if (empty($_POST['user_last_name'])) {
+    $errors['user_last_name'] = 'Last name is required.';
+  } else {
+    $user_last_name = $_POST['user_last_name'];
+  }
+
+  if (empty($_POST['age'])) {
+    $errors['age'] = 'Age is required';
+  } else {
+    $user_age = $_POST['age'];
+  }
+  if (empty($_POST['gender'])) {
+    $errors['gender'] = 'Gender is required';
+  } else {
+    $user_gender = $_POST['gender'];
+  }
+  if (empty($_POST['email'])) {
+    $errors['email'] = 'Email is required';
+  } else {
+    $new_email = $_POST['email'];
+
+    if ($new_email != $user_email) {
+      if (!filter_var($new_email, FILTER_VALIDATE_EMAIL)) {
+        $errors['email'] = 'Invalid E-Mail Format';
+      } else {
+        $sql_check_email = "SELECT * FROM `em_users` WHERE email='$new_email'";
+        $result_check_email = $con->query($sql_check_email);
+
+        if ($result_check_email->num_rows > 0) {
+          $errors['email'] = "Email already exists";
+        }
+      }
     }
-  
-    $fname = $row['fname'];
-    $lname = $row['lname'];
-    $age = $row['age'];
-    $gender = $row['gender'];
-    $email = $row['email'];
-    $mobile = $row['mobile'];
-    $role=$row['role_id'];
-    
-    $country = $row['country'];
-    
-
-    $state = $row['state']; 
-    $sql2='select *from State';
-    $result2=mysqli_query($con,$sql2);
-  
-    $city = $row['city'];
-    $sql3='select *from City';
-    $result3=mysqli_query($con,$sql3);
- 
-    $confirmation=$row['confirm'];
-   
-    
-    
-    if (isset($_POST['submit'])) {
-        $errors = [];
-        if (empty($_POST['fname'])) {
-            $errors["fname"] = "First name is required.";
-        } else {
-            $fname = $_POST['fname'];
-        }
-    
-        if (empty($_POST['lname'])) {
-            $errors['lname'] = 'Last name is required.';
-        } else {
-            $lname = $_POST['lname'];
-        }
-    
-        if (empty($_POST['age'])) {
-            $errors['age'] = 'Age is required';
-        } else {
-            $age = $_POST['age'];
-        }
-        if (empty($_POST['gender'])) {
-          $errors['gender'] = 'Gender is required';
-      } else {
-          $gender = $_POST['gender'];
-      }
-        if (empty($_POST['email'])) {
-            $errors['email'] = 'Email is required';
-        } else {
-            $new_email = $_POST['email'];
-           
-            if($new_email!=$email){
-              if(!filter_var($new_email, FILTER_VALIDATE_EMAIL)){
-                $errors['email'] = 'Invalid E-Mail Format';
-              }
-              else{
-            $sql_check_email = "SELECT * FROM `employees` WHERE email='$new_email'";
-      $result_check_email = $con->query($sql_check_email);
-              
-      if ($result_check_email->num_rows > 0) {
-        $errors['email'] = "Email already exists";}
-      }}
-            
-        }
-        if (!empty($_POST['mobile'])) {
-            $mobile = $_POST['mobile'];
-            $pattern = '/^[0-9]{10}+$/';
-            if (!preg_match($pattern, $mobile)) {
-                $errors['mobile'] = "Mobile Number must be 10 digits long and contains number from [0 to 9].";
-            } else {
-                $mobile = $_POST['mobile'];
-            }
-        }
-
-        if (empty($_POST['role'])) {
-            $errors['role'] = 'Role is required';
-        } else {
-            $role = $_POST['role'];
-        }
-    
-        if (empty($_POST['country'])) {
-            $errors['country'] = 'Country name required';
-        } else {
-            $country = $_POST['country'];
-            
-        }
-
-        if (empty($_POST['state'])) {
-          $errors['state'] = 'State name required';
-      } else {
-          $state = $_POST['state'];
-        
-          $q1="select state_name from State where id=$state";
-          $r=mysqli_query($con,$q1);
-          $r=mysqli_fetch_array($r);
-          $state=$r['state_name'];
-      }
-  
-      if (empty($_POST['city'])) {
-        $errors['city'] = 'City name required';
+  }
+  if (!empty($_POST['mobile'])) {
+    $user_phone = $_POST['mobile'];
+    $pattern = '/^[0-9]{10}+$/';
+    if (!preg_match($pattern, $user_phone)) {
+      $errors['mobile'] = "Mobile Number must be 10 digits long and contains number from [0 to 9].";
     } else {
-        $city = $_POST['city'];
-
-        $q1="select city_name from City where id=$city";
-        $r=mysqli_query($con,$q1);
-        $r=mysqli_fetch_array($r);
-        $city=$r['city_name'];
-       
+      $user_phone = $_POST['mobile'];
     }
-   
-    
-        if(!empty($_POST['password'])) {
-            $password = $_POST['password'];
-            $pattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>])[A-Za-z\d!@#$%^&*()\-_=+{};:,<.>.]{8,}$/';
-            
-            if (!preg_match($pattern, $password)) {
-                $errors['password'] = "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.";
-            } 
-        }
-        else{
-            $errors['password'] = "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.";
-        }
+  }
 
-        if (empty($_POST['cpassword'])) {
-          $errors['cpassword'] = 'Please Retype Password.';
-        } else {
-          $cpassword = $_POST['cpassword'];
-          if($cpassword!=$password){
-              $errors['cpassword']='Password not match';
-          }
-          else{
-              $password=md5($password);
-          }
-        }
-        if (!empty($_POST['confirmation'])) {
-          $confirmation = 1;
-        }
-        else{
-          $confirmation = 0;
-        }
-          $updatedAT = time();
-        if (empty($errors)) {
-            $sql = "update `employees` set fname='$fname',lname='$lname',age='$age',gender='$gender',email='$new_email',mobile='$mobile',country='$country',role_id='$role',state='$state',city='$city',password='$password',updatedAt='$updatedAT',confirm='$confirmation' where id=$id";
-            $result = mysqli_query($con, $sql);
-            if ($result) {
-                header('location:../list-users');
-            } else {
-                die(mysqli_error($con));
-            }
-        }
+  if (empty($_POST['role'])) {
+    $errors['role'] = 'Role is required';
+  } else {
+    $user_role_id = $_POST['role'];
+  }
+
+  if (empty($_POST['country'])) {
+    $errors['country'] = 'Country name required';
+  } else {
+    $user_country = $_POST['country'];
+  }
+
+  if (empty($_POST['state'])) {
+    $errors['state'] = 'State name required';
+  } else {
+    $user_state = $_POST['state'];
+
+    $q1 = "select state_name from em_states where state_id=$user_state";
+    $r = mysqli_query($con, $q1);
+    $r = mysqli_fetch_array($r);
+    $user_state = $r['state_name'];
+  }
+
+  if (empty($_POST['city'])) {
+    $errors['city'] = 'City name required';
+  } else {
+    $user_city = $_POST['city'];
+
+    $q1 = "select city_name from em_cities where city_id=$user_city";
+    $r = mysqli_query($con, $q1);
+    $r = mysqli_fetch_array($r);
+    $user_city = $r['city_name'];
+  }
+
+
+  if (!empty($_POST['password'])) {
+    $password = $_POST['password'];
+    $pattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>])[A-Za-z\d!@#$%^&*()\-_=+{};:,<.>.]{8,}$/';
+
+    if (!preg_match($pattern, $password)) {
+      $errors['password'] = "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.";
     }
+  } else {
+    $errors['password'] = "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.";
+  }
+
+  if (empty($_POST['cpassword'])) {
+    $errors['cpassword'] = 'Please Retype Password.';
+  } else {
+    $cpassword = $_POST['cpassword'];
+    if ($cpassword != $password) {
+      $errors['cpassword'] = 'Password not match';
+    } else {
+      $password = md5($password);
+    }
+  }
+  if (!empty($_POST['confirmation'])) {
+    $confirmation = 1;
+  } else {
+    $confirmation = 0;
+  }
+  $user_updatedAt = time();
+  if (empty($errors)) {
+    $sql = "update `em_users` set user_first_name='$user_first_name',user_last_name='$user_last_name',user_age='$user_age',user_gender='$user_gender',user_email='$new_email',user_phone='$user_phone',user_country='$user_country',user_role_id='$user_role_id',user_state='$user_state',user_city='$user_city',user_password='$password',user_updatedAt='$user_updatedAt',user_confirm='$confirmation' where user_id=$id";
+    $result = mysqli_query($con, $sql);
+    if ($result) {
+      header('location:../list-users');
+    } else {
+      die(mysqli_error($con));
+    }
+  }
+}
 ?>
 <html lang="en">
 
@@ -197,8 +197,9 @@ if(!isset($_SESSION['loggedin']) || ($_SESSION['loggedin'])!=TRUE){
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
+
 <body>
-<?php include "../header.php";?>
+  <?php include "../header.php"; ?>
   <div class="clear"></div>
   <div class="clear"></div>
   <div class="content">
@@ -242,38 +243,38 @@ if(!isset($_SESSION['loggedin']) || ($_SESSION['loggedin'])!=TRUE){
       <div class="right_side_content">
         <h1>Update User</h1>
         <div class="list-contet">
-         
 
-          <form class="form-edit" method="POST">
+
+          <form novalidate class="form-edit" method="POST">
             <?php
-              if(!empty($errors)){
-                echo '<div class="add-msgs" id="error-box">
+            if (!empty($errors)) {
+              echo '<div class="add-msgs" id="error-box">
           <div class="error-message-div error-msg" id="msg"><img src="../images/unsucess-msg.png"><strong>UnSucess!</strong> Your
            Data hasn not been Updated </div>
           </div>';
-              }
+            }
             ?>
-          <div class="add-msgs" id="error-box">
-            <div class="error-message-div error-msg" id="msg" style="display:none"><img src="../images/unsucess-msg.png"><strong>UnSucess!</strong> Your
-             Data hasn't been Send </div>
+            <div class="add-msgs" id="error-box">
+              <div class="error-message-div error-msg" id="msg" style="display:none"><img src="../images/unsucess-msg.png"><strong>UnSucess!</strong> Your
+                Data hasn't been Send </div>
             </div>
-        
-          <div class="form-row">
+
+            <div class="form-row">
               <div class="form-label">
                 <label>First Name : <span>*</span></label>
               </div>
               <div class="input-field">
-                <input type="text" class="search-box" name="fname" placeholder="Enter First Name" autocomplete="off" value="<?php echo $fname ?>">
-                <span id="firstnameError" class="error"><?php echo isset($errors['fname']) ? $errors['fname'] : ''; ?></span>
+                <input type="text" class="search-box" name="user_first_name" placeholder="Enter First Name" autocomplete="off" value="<?php echo $user_first_name ?>">
+                <span id="firstnameError" class="error"><?php echo isset($errors['user_first_name']) ? $errors['fuser_first_name'] : ''; ?></span>
               </div>
             </div>
-          <div class="form-row">
+            <div class="form-row">
               <div class="form-label">
                 <label>Last Name : <span>*</span></label>
               </div>
               <div class="input-field">
-                <input type="text" class="search-box" name="lname" placeholder="Enter Last Name" autocomplete="off" value="<?php echo $lname ?>"/>
-                <span id="lastnameError" class="error"><?php echo isset($errors['lname']) ? $errors['lname'] : ''; ?></span>
+                <input type="text" class="search-box" name="user_last_name" placeholder="Enter Last Name" autocomplete="off" value="<?php echo $user_last_name ?>" />
+                <span id="lastnameError" class="error"><?php echo isset($errors['user_last_name']) ? $errors['user_last_name'] : ''; ?></span>
               </div>
             </div>
 
@@ -282,21 +283,21 @@ if(!isset($_SESSION['loggedin']) || ($_SESSION['loggedin'])!=TRUE){
                 <label>Age: <span>*</span></label>
               </div>
               <div class="input-field">
-                <input type="text" class="search-box" name="age" placeholder="Enter Age" value="<?php echo $age ?>"/>
+                <input type="text" class="search-box" name="age" placeholder="Enter Age" value="<?php echo $user_age ?>" />
                 <span id="ageError" class="error"><?php echo isset($errors['age']) ? $errors['age'] : ''; ?></span>
               </div>
             </div>
 
             <div class="form-row radio-row set-radio">
-             <div class="form-label">
-               <label>Gender: <span>*</span> </label>
-          </div>
-            <div class="input-field">
-        <label><input type="radio" name="gender" <?php if($gender=="Male") echo "checked='checked'";?> value="Male" > <span>Male </span></label><label> <input type="radio" name="gender" <?php if($gender=="Female") echo "checked='checked'";?> value="Female"> <span>Female</span> </label><br>
-        <span id="genderError" class="error"><?php echo isset($errors['gender']) ? $errors['gender'] : ''; ?></span>
+              <div class="form-label">
+                <label>Gender: <span>*</span> </label>
+              </div>
+              <div class="input-field">
+                <label><input type="radio" name="gender" <?php if ($user_gender == "Male") echo "checked='checked'"; ?> value="Male"> <span>Male </span></label><label> <input type="radio" name="gender" <?php if ($user_gender == "Female") echo "checked='checked'"; ?> value="Female"> <span>Female</span> </label><br>
+                <span id="genderError" class="error"><?php echo isset($errors['gender']) ? $errors['gender'] : ''; ?></span>
 
- </div>
- </div>
+              </div>
+            </div>
 
 
             <div class="form-row">
@@ -304,17 +305,17 @@ if(!isset($_SESSION['loggedin']) || ($_SESSION['loggedin'])!=TRUE){
                 <label>Email: <span>*</span></label>
               </div>
               <div class="input-field">
-                <input type="text" class="search-box" name="email" placeholder="Enter Email" value="<?php echo $email ?>"/>
+                <input type="text" class="search-box" name="email" placeholder="Enter Email" value="<?php echo $user_email ?>" />
                 <span id="emailError" class="error"><?php echo isset($errors['email']) ? $errors['email'] : ''; ?></span>
               </div>
             </div>
-           
+
             <div class="form-row">
               <div class="form-label">
                 <label>Mobile: <span>*</span></label>
               </div>
               <div class="input-field">
-                <input type="text" class="search-box" name="mobile" placeholder="Enter Mobile No." value="<?php echo $mobile ?>"/>
+                <input type="text" class="search-box" name="mobile" placeholder="Enter Mobile No." value="<?php echo $user_phone ?>" />
                 <span id="mobileError" class="error"><?php echo isset($errors['mobile']) ? $errors['mobile'] : ''; ?></span>
               </div>
             </div>
@@ -324,47 +325,44 @@ if(!isset($_SESSION['loggedin']) || ($_SESSION['loggedin'])!=TRUE){
               </div>
               <div class="input-field">
                 <div class="select">
-                  <select name="role" class="role-info" id="role" value="<?php echo $role; ?>">
+                  <select name="role" class="role-info" id="role" value="<?php echo $user_role_id; ?>">
                     <option value="">Select Your Role</option>
                     <?php
-                    $sql1= "select *from emp_roles";
-                    $result1=mysqli_query($con,$sql1);
-                    while($row1=mysqli_fetch_array( $result1)) {
-                      if($role==$row1['id']){
-                        echo "<option selected value='$row1[id]'>$row1[role]</option>";
-                      }
-                      else{
-                        echo "<option value='$row1[id]'>$row1[role]</option>";
+                    $sql1 = "select *from em_roles";
+                    $result1 = mysqli_query($con, $sql1);
+                    while ($row1 = mysqli_fetch_array($result1)) {
+                      if ($user_role_id == $row1['role_id']) {
+                        echo "<option selected value='$row1[role_id]'>$row1[role_name]</option>";
+                      } else {
+                        echo "<option value='$row1[role_id]'>$row1[role_name]</option>";
                       }
                     }
                     ?>
                   </select>
                   <span id="roleError" class="error"><?php echo isset($errors['role']) ? $errors['role'] : ''; ?></span>
                 </div>
-              
+
               </div>
             </div>
-            
-           
+
+
             <div class="form-row">
               <div class="form-label">
                 <label>Country: <span>*</span> </label>
               </div>
               <div class="input-field">
                 <div class="select">
-                  <select name="country" class="country-info" id="countryId" onchange="cntry_change()" value="<?php echo $country; ?>" >
+                  <select name="country" class="country-info" id="countryId" onchange="cntry_change()" value="<?php echo $user_country; ?>">
                     <option value="">Select Your Country</option>
                     <?php
-                    $sql1='select *from Country';
-                    $result1=mysqli_query($con,$sql1);                 
-                    while($row11= mysqli_fetch_array($result1)) {
-                     
-                      if($country == $row11['c_name']) {
-                        echo "<option selected value='$country'>$country</option>";
-                       
-                      }
-                      else{
-                        echo "<option value='$row11[c_name]'>$row11[c_name]</option>";
+                    $sql1 = 'select * from em_countries';
+                    $result1 = mysqli_query($con, $sql1);
+                    while ($row11 = mysqli_fetch_array($result1)) {
+
+                      if ($user_country == $row11['country_name']) {
+                        echo "<option selected value='$row11[country_name]'>$row11[country_name]</option>";
+                      } else {
+                        echo "<option value='$row11[country_name]'>$row11[country_name]</option>";
                       }
                     }
                     ?>
@@ -382,25 +380,23 @@ if(!isset($_SESSION['loggedin']) || ($_SESSION['loggedin'])!=TRUE){
               </div>
               <div class="input-field">
                 <div class="select">
-                <select disabled name="state" class="countries form-control" id="stateId"  onchange="state_change()" value="<?php echo $state; ?>">
-                                <option value="null">Select State</option>
-                               
-                                <?php
-                                
-                
+                  <select disabled name="state" class="countries form-control" id="stateId" onchange="state_change()" value="<?php echo $user_state; ?>">
+                    <option value="null">Select State</option>
+
+                    <?php
+
+
                     while ($row12 = mysqli_fetch_array($result2)) {
-                     
-                      if ($state == $row12['state_name']) {
+
+                      if ($user_state == $row12['state_name']) {
                         echo "<option selected value='$row12[state_name]'>$row12[state_name]</option>";
-                        
-                      }
-                      else{
+                      } else {
                         echo "<option value='$row12[state_name]'>$row12[state_name]</option>";
                       }
                     }
                     ?>
-                               
-                            </select>
+
+                  </select>
                   <span id="stateError" class="error"><?php echo isset($errors['state']) ? $errors['state'] : ''; ?></span>
                 </div>
               </div>
@@ -412,27 +408,26 @@ if(!isset($_SESSION['loggedin']) || ($_SESSION['loggedin'])!=TRUE){
               </div>
               <div class="input-field">
                 <div class="select">
-                <select disabled name="city" class="countries form-control" id="cityId" value="<?php echo $city; ?>">
-                                <option value="">Select City</option>
-                                <?php
-                
+                  <select disabled name="city" class="countries form-control" id="cityId" value="<?php echo $user_city; ?>">
+                    <option value="">Select City</option>
+                    <?php
+
                     while ($row13  = mysqli_fetch_array($result3)) {
-                      if ($city == $row13['city_name']) {
+                      if ($user_city == $row13['city_name']) {
                         echo "<option selected value='$row13[city_name]'>$row13[city_name]</option>";
-                      }
-                      else{
+                      } else {
                         echo "<option value='$row13[city_name]'>$row13[city_name]</option>";
                       }
                     }
                     ?>
-                            </select>
+                  </select>
                   <span id="cityError" class="error"><?php echo isset($errors['city']) ? $errors['city'] : ''; ?></span>
                 </div>
               </div>
             </div>
-            
-            
-            
+
+
+
             <div class="form-row">
               <p style="border-bottom: 1px dashed black; margin-bottom: 10px;"></p>
               <div class="form-label">
@@ -454,7 +449,7 @@ if(!isset($_SESSION['loggedin']) || ($_SESSION['loggedin'])!=TRUE){
               </div>
             </div>
             <div class="news-letter">
-              <input type="checkbox" <?php  if($confirmation==1) echo"checked='checked'";?>  id="confirmation" name="confirmation" style="margin-left: 223px;"><span style="color: red;"> </span>
+              <input type="checkbox" <?php if ($confirmation == 1) echo "checked='checked'"; ?> id="confirmation" name="confirmation" style="margin-left: 223px;"><span style="color: red;"> </span>
               <label for="confirmation" style="color:#5d5252;;">
                 <span><small>Want to receive the E-mail! </small></span>
               </label>
@@ -482,112 +477,111 @@ if(!isset($_SESSION['loggedin']) || ($_SESSION['loggedin'])!=TRUE){
   </div>
 
   <script>
-        function cntry_change() {
-            const countryId = document.getElementById('countryId').value;
-            document.getElementById('stateId').removeAttribute("disabled");
-            console.log(countryId);
+    function cntry_change() {
+      const countryId = document.getElementById('countryId').value;
+      document.getElementById('stateId').removeAttribute("disabled");
+      console.log(countryId);
 
-            const requestOptions = {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    countryId: countryId
-                }),
-                redirect: 'follow'
-            };
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          countryId: countryId
+        }),
+        redirect: 'follow'
+      };
 
-            fetch("../fetchData.php/", requestOptions)
-                .then(response => {
-                    
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
+      fetch("../fetchData.php/", requestOptions)
+        .then(response => {
 
-                    const contentType = response.headers.get('content-type');
-                    if (contentType && contentType.includes('application/json')) {
-                        return response.json();
-                    } else {
-                        throw new Error('Response is not JSON');
-                    }
-                })
-                .then(result => {
-                    const countrySelect = document.getElementById('stateId');
-                    countrySelect.innerHTML = '';
-                    let option = document.createElement('option');
-                    option.textContent = "Select State";
-                    option.value = "null";
-                    countrySelect.appendChild(option);
-                    option = null
-                    result.forEach(element => {
-                        let option = document.createElement('option');
-                        option.textContent = element.state_name;
-                        option.value = element.id;
-                        countrySelect.appendChild(option);
-                        option = null
-                    });
-                    countrySelect.removeAttribute('disabled')
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
 
-                }
+          const contentType = response.headers.get('content-type');
+          if (contentType && contentType.includes('application/json')) {
+            return response.json();
+          } else {
+            throw new Error('Response is not JSON');
+          }
+        })
+        .then(result => {
+            const countrySelect = document.getElementById('stateId');
+            countrySelect.innerHTML = '';
+            let option = document.createElement('option');
+            option.textContent = "Select State";
+            option.value = "null";
+            countrySelect.appendChild(option);
+            option = null
+            result.forEach(element => {
+              let option = document.createElement('option');
+              option.textContent = element.state_name;
+              option.value = element.id;
+              countrySelect.appendChild(option);
+              option = null
+            });
+            countrySelect.removeAttribute('disabled')
 
-                )
-                .catch(error => console.log('error', error));
-        }
+          }
 
-        function state_change() {
-          console.log("wjkq lksjl");
-            const stateId = document.getElementById('stateId').value;
-             document.getElementById('cityId').removeAttribute("disabled");
-            const requestOptions = {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    stateId: stateId
-                }),
-                redirect: 'follow'
-            };
+        )
+        .catch(error => console.log('error', error));
+    }
 
-            fetch("../getData2.php/", requestOptions)
-                .then(response => {
-                    
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
+    function state_change() {
+      console.log("wjkq lksjl");
+      const stateId = document.getElementById('stateId').value;
+      document.getElementById('cityId').removeAttribute("disabled");
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          stateId: stateId
+        }),
+        redirect: 'follow'
+      };
 
-                    const contentType = response.headers.get('content-type');
-                    if (contentType && contentType.includes('application/json')) {
-                        return response.json();
-                    } else {
-                        throw new Error('Response is not JSON');
-                    }
-                })
-                .then(result => {
-                    const stateSelect = document.getElementById('cityId');
-                    stateSelect.innerHTML = '';
-                    let option = document.createElement('option');
-                    option.textContent = "Select City";
-                    option.value = "null";
-                    stateSelect.appendChild(option);
-                    option = null
-                    result.forEach(element => {
-                        let option = document.createElement('option');
-                        option.textContent = element.city_name;
-                        option.value = element.id;
-                        stateSelect.appendChild(option);
-                        option = null
-                    });
-                    stateSelect.removeAttribute('disabled')
+      fetch("../getData2.php/", requestOptions)
+        .then(response => {
 
-                }
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
 
-                )
-                .catch(error => console.log('error', error));
-        }
+          const contentType = response.headers.get('content-type');
+          if (contentType && contentType.includes('application/json')) {
+            return response.json();
+          } else {
+            throw new Error('Response is not JSON');
+          }
+        })
+        .then(result => {
+            const stateSelect = document.getElementById('cityId');
+            stateSelect.innerHTML = '';
+            let option = document.createElement('option');
+            option.textContent = "Select City";
+            option.value = "null";
+            stateSelect.appendChild(option);
+            option = null
+            result.forEach(element => {
+              let option = document.createElement('option');
+              option.textContent = element.city_name;
+              option.value = element.id;
+              stateSelect.appendChild(option);
+              option = null
+            });
+            stateSelect.removeAttribute('disabled')
 
-        </script>
+          }
+
+        )
+        .catch(error => console.log('error', error));
+    }
+  </script>
 
 </body>
 

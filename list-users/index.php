@@ -6,11 +6,11 @@ if(!isset($_SESSION['loggedin']) || ($_SESSION['loggedin'])!=TRUE){
 }
 include '../connect.php';
 
-$id=$_SESSION['id']; 
-$sq='select role_id from employees where id='.$id;
+$id=$_SESSION['user_id']; 
+$sq='select user_role_id from em_users where user_id='.$id;
 $res=mysqli_query($con,$sq);
 $row=mysqli_fetch_array($res);
-if($row['role_id']!=1 && $row['role_id']!=5){
+if($row['user_role_id']!=1 && $row['user_role_id']!=5){
 	header("location:../dashboard");
 	exit;
 }
@@ -20,20 +20,20 @@ $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $offset = ($page - 1) * $limit;
 
 
-$sql_total = "SELECT COUNT(*) as total FROM employees WHERE isdeleted != 1";
+$sql_total = "SELECT COUNT(*) as total FROM em_users WHERE user_isDeleted != 1";
 $result_total = $con->query($sql_total);
 $row_total = $result_total->fetch_assoc();
 $total_records = $row_total['total'];
 $total_pages = ceil($total_records / $limit);
 
 //sorting
-$sort = isset($_GET['sort']) ? $_GET['sort'] : 'fname';
+$sort = isset($_GET['sort']) ? $_GET['sort'] : 'user_first_name';
 $order = isset($_GET['order']) && $_GET['order'] === 'desc' ? 'desc' : 'asc';
 $new_order = $order === 'asc' ? 'desc' : 'asc';
-$valid_columns = ['id', 'fname', 'lname', 'email', 'mobile', 'role'];
+$valid_columns = ['user_id', 'user_first_name', 'user_last_name', 'user_email', 'user_phone', 'user_role_id'];
 
 if (!in_array($sort, $valid_columns)) {
-	$sort_column = 'id';
+	$sort_column = 'user_id';
 }
 
 // Searching
@@ -41,12 +41,12 @@ $search = '';
 if (isset($_GET['search']) && !empty($_GET['search'])) {
 	$search = trim($_GET['search']);
 
-	$sql_total = "SELECT COUNT(*) as total FROM employees WHERE isdeleted != 1 AND (fname LIKE '%$search%' 
-        OR lname LIKE '%$search%' 
-        OR email LIKE '%$search%' 
-        OR age LIKE '%$search%' 
-        OR mobile LIKE '%$search%' 
-        OR role_id LIKE '%$search%' ) ";
+	$sql_total = "SELECT COUNT(*) as total FROM em_users WHERE user_isDeleted != 1 AND (user_first_name LIKE '%$search%' 
+        OR user_last_name LIKE '%$search%' 
+        OR user_email LIKE '%$search%' 
+        OR user_age LIKE '%$search%' 
+        OR user_phone LIKE '%$search%' 
+        OR user_role_id LIKE '%$search%' ) ";
 $result_total = $con->query($sql_total);
 $row_total = $result_total->fetch_assoc();
 $total_records = $row_total['total'];
@@ -55,17 +55,17 @@ $total_pages = ceil($total_records / $limit);
 }
 
 
-$sql = "SELECT employees.id, fname,lname,email,mobile,emp_roles.role from `employees` left join emp_roles on employees.role_id=emp_roles.id where isdeleted!=1 
-        AND (fname LIKE '%$search%' 
-        OR lname LIKE '%$search%' 
-        OR email LIKE '%$search%' 
-        OR age LIKE '%$search%' 
-        OR mobile LIKE '%$search%' 
-        OR role_id LIKE '%$search%' ) 
+$sql = "SELECT em_users.user_id, user_first_name,user_last_name,user_email,user_phone,em_roles.role_name from `em_users` left join em_roles on em_users.user_role_id=em_roles.role_id where user_isDeleted!=1 
+        AND (user_first_name LIKE '%$search%' 
+        OR user_last_name LIKE '%$search%' 
+        OR user_email LIKE '%$search%' 
+        OR user_age LIKE '%$search%' 
+        OR user_phone LIKE '%$search%' 
+        OR user_role_id LIKE '%$search%' ) 
         ORDER BY $sort $order 
         LIMIT $limit OFFSET $offset";
 
-//$sql="SELECT employees.id, fname,lname,email,mobile,emp_roles.role from `employees` left join emp_roles on employees.role_id=emp_roles.id where isdeleted!=1 ";
+//$sql="SELECT em_users.id, user_first_name,user_last_name,email,mobile,em_roles.role from `em_users` left join em_roles on em_users.role_id=em_roles.id where user_isDeleted!=1 ";
 
 $result = $con->query($sql);
 
@@ -158,11 +158,11 @@ $i = $offset + 1;
 								<div class="select">
 									<select name="sort" onchange="sortSelect()" id="sortInput">">
 										<option value="null">Select column</option>
-										<option <?php echo 'fname' == $sort ? 'selected' : ''; ?> value='fname'>First Name</option>
-										<option <?php echo 'lname' == $sort ? 'selected' : ''; ?> value='lname'>Last Name</option>
-										<option <?php echo 'email' == $sort ? 'selected' : ''; ?> value='email'>E-mail</option>
-										<option <?php echo 'mobile' == $sort ? 'selected' : ''; ?> value='mobile'>Mobile</option>
-										<option <?php echo 'role' == $sort ? 'selected' : ''; ?> value='role'>Role</option>
+										<option <?php echo 'user_first_name' == $sort ? 'selected' : ''; ?> value='user_first_name'>First Name</option>
+										<option <?php echo 'user_last_name' == $sort ? 'selected' : ''; ?> value='user_last_name'>Last Name</option>
+										<option <?php echo 'user_email' == $sort ? 'selected' : ''; ?> value='user_email'>E-mail</option>
+										<option <?php echo 'user_phone' == $sort ? 'selected' : ''; ?> value='user_phone'>Mobile</option>
+										<option <?php echo 'role_name' == $sort ? 'selected' : ''; ?> value='role_name'>Role</option>
 
 									</select>
 								</div>
@@ -180,11 +180,11 @@ $i = $offset + 1;
 						<tbody>
 							<tr>
 								<th width="10px">Sr No.</th>
-								<th width="200px"><a href="<?php echo '../list-users?sort=fname&order=' . $new_order . '&search=' . $search ?> ">First Name <?php if($sort == 'fname'){ if($order=='asc'){ echo "<i class='fa-solid fa-arrow-down'></i> ";} else{ echo "<i class='fa-solid fa-arrow-up'></i>"; }} ?></a></th>
-								<th width="220x"><a href="<?php echo '../list-users?sort=lname&order=' . $new_order . '&search=' . $search ?> ">Last Name <?php if($sort == 'lname'){ if($order=='asc'){ echo "<i class='fa-solid fa-arrow-down'></i> ";} else{ echo "<i class='fa-solid fa-arrow-up'></i>"; }} ?></a></th>
-								<th width="120px"><a href="<?php echo '../list-users?sort=email&order=' . $new_order . '&search=' . $search ?> ">E-Mail <?php if($sort == 'email'){ if($order=='asc'){ echo "<i class='fa-solid fa-arrow-down'></i> ";} else{ echo "<i class='fa-solid fa-arrow-up'></i>"; }} ?></a></th>
-								<th width="110px"><a href="<?php echo '../list-users?sort=mobile&order=' . $new_order . '&search=' . $search ?> ">Mobile <?php if($sort == 'mobile'){ if($order=='asc'){ echo "<i class='fa-solid fa-arrow-down'></i> ";} else{ echo "<i class='fa-solid fa-arrow-up'></i>"; }} ?></a></th>
-								<th width="100px"><a href="<?php echo '../list-users?sort=role&order=' . $new_order . '&search=' . $search ?> ">Role <?php if($sort == 'role'){ if($order=='asc'){ echo "<i class='fa-solid fa-arrow-down'></i> ";} else{ echo "<i class='fa-solid fa-arrow-up'></i>"; }} ?></a></th>
+								<th width="200px"><a href="<?php echo '../list-users?sort=user_first_name&order=' . $new_order . '&search=' . $search ?> ">First Name <?php if($sort == 'user_first_name'){ if($order=='asc'){ echo "<i class='fa-solid fa-arrow-down'></i> ";} else{ echo "<i class='fa-solid fa-arrow-up'></i>"; }} ?></a></th>
+								<th width="220x"><a href="<?php echo '../list-users?sort=user_last_name&order=' . $new_order . '&search=' . $search ?> ">Last Name <?php if($sort == 'user_last_name'){ if($order=='asc'){ echo "<i class='fa-solid fa-arrow-down'></i> ";} else{ echo "<i class='fa-solid fa-arrow-up'></i>"; }} ?></a></th>
+								<th width="120px"><a href="<?php echo '../list-users?sort=user_email&order=' . $new_order . '&search=' . $search ?> ">E-Mail <?php if($sort == 'user_email'){ if($order=='asc'){ echo "<i class='fa-solid fa-arrow-down'></i> ";} else{ echo "<i class='fa-solid fa-arrow-up'></i>"; }} ?></a></th>
+								<th width="110px"><a href="<?php echo '../list-users?sort=user_phone&order=' . $new_order . '&search=' . $search ?> ">Mobile <?php if($sort == 'user_phone'){ if($order=='asc'){ echo "<i class='fa-solid fa-arrow-down'></i> ";} else{ echo "<i class='fa-solid fa-arrow-up'></i>"; }} ?></a></th>
+								<th width="100px"><a href="<?php echo '../list-users?sort=role_name&order=' . $new_order . '&search=' . $search ?> ">Role <?php if($sort == 'role_name'){ if($order=='asc'){ echo "<i class='fa-solid fa-arrow-down'></i> ";} else{ echo "<i class='fa-solid fa-arrow-up'></i>"; }} ?></a></th>
 								<th width="98px">Operation</th>
 							</tr>
 							<?php
@@ -193,14 +193,14 @@ $i = $offset + 1;
 								
 								echo "
         <tr><td>$i</td>
-        <td>" . $row["fname"] . "</td>
-        <td>" . $row["lname"] . "</td>
-        <td>" . $row["email"] . "</td>
-        <td>" . $row["mobile"] . "</td>
-        <td>" . $row["role"] . "</td>
+        <td>" . $row["user_first_name"] . "</td>
+        <td>" . $row["user_last_name"] . "</td>
+        <td>" . $row["user_email"] . "</td>
+        <td>" . $row["user_phone"] . "</td>
+        <td>" . $row["role_name"] . "</td>
         <td> 
-		 <button><a href='../edit-user?u_id=$row[id]'><img src='../images/edit-icon.png'></a></button>
-             <button onclick='myFunction($row[id])'><img src='../images/cross.png'></button> 
+		 <button><a href='../edit-user?u_id=$row[user_id]'><img src='../images/edit-icon.png'></a></button>
+             <button onclick='myFunction($row[user_id])'><img src='../images/cross.png'></button> 
            
         </td>
         </tr>";
@@ -225,24 +225,35 @@ $i = $offset + 1;
 			</div>-->
 
 					<?php
+					
 					echo "<div class='pagination-div'>";
+					
+					
 					if ($page > 1) {
-						echo "<a href='?page=" . ($page - 1) . "&sort=" . htmlspecialchars($sort) . "&order=" . htmlspecialchars($order) . "&search=" . urlencode($search) . "'> Prev</a>";
+						echo "<a href='?page=" . ($page - 1) . "&sort=" . htmlspecialchars($sort) . "&order=" . htmlspecialchars($order) . "&search=" . urlencode($search) . "'>Prev</a>";
 					} else {
-						echo "<span style='pointer-events: none' class='a-dis'> Prev</span>";
+						echo "<span class='pagination-disabled'>Prev</span>";
 					}
+					
+					
 					for ($i = 1; $i <= $total_pages; $i++) {
-						echo "<a href='?page=$i&sort=" . htmlspecialchars($sort) . "&order=" . htmlspecialchars($order) . "&search=" . urlencode($search) . "' class='" . ($i === $page ? 'active' : '') . "'>$i</a>";
+						if ($i === $page) {
+							
+							echo "<span class='pagination-current'>$i</span>";
+						} else {
+							echo "<a href='?page=$i&sort=" . htmlspecialchars($sort) . "&order=" . htmlspecialchars($order) . "&search=" . urlencode($search) . "'>$i</a>";
+						}
 					}
-
+					
+				
 					if ($page < $total_pages) {
 						echo "<a href='?page=" . ($page + 1) . "&sort=" . htmlspecialchars($sort) . "&order=" . htmlspecialchars($order) . "&search=" . urlencode($search) . "'>Next</a>";
 					} else {
-						echo "<span style='pointer-events: none;color=white' class='a-dis'>Next</span>";
+						echo "<span class='pagination-disabled'>Next</span>";
 					}
-
+					
 					echo "</div>";
-					?>
+					?>	
 
 
 				</div>

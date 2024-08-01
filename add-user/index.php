@@ -6,133 +6,144 @@ if(!isset($_SESSION['loggedin']) || ($_SESSION['loggedin'])!=TRUE){
 }
 
 include '../connect.php';
-$id=$_SESSION['id']; 
-$sq='select role_id from employees where id='.$id;
+$id=$_SESSION['user_id']; 
+$sq='select user_role_id from em_users where user_id='.$id;
 $res=mysqli_query($con,$sq);
 $row=mysqli_fetch_array($res);
-if($row['role_id']!=1 && $row['role_id']!=5){
+if($row['user_role_id']!=1 && $row['user_role_id']!=5){
 	header("location: ../dashboard");
 	exit;
 }
 
 
-$sql3 = "select *from City";
+$sql3 = "select *from em_cities";
 $result3 = $con->query($sql3);
 
-
+$user_gender='';
 if (isset($_POST['submit'])) {
   $errors = [];
-  echo ' <div class="error-message-div error-msg" id="msg"><img src="../images/unsucess-msg.png"><strong>UnSucess!</strong> Your
-            Message hasn not been Send </div>';
+  // echo ' <div class="error-message-div error-msg" id="msg"><img src="../images/unsucess-msg.png"><strong>UnSucess!</strong> Your
+  //           Message hasn not been Send </div>';
 
-  if (empty($_POST['fname'])) {
-    $errors["fname"] = "First name is required.";
+  if (empty($_POST['user_first_name'])) {
+    $errors["user_first_name"] = "First name is required.";
   } else {
-    $fname = $_POST['fname'];
+    $user_first_name = $_POST['user_first_name'];
   }
 
-  if (empty($_POST['lname'])) {
-    $errors['lname'] = 'Last name is required.';
+  if (empty($_POST['user_last_name'])) {
+    $errors['user_last_name'] = 'Last name is required.';
   } else {
-    $lname = $_POST['lname'];
+    $user_last_name = $_POST['user_last_name'];
   }
 
-  if (empty($_POST['age'])) {
-    $errors['age'] = 'Age is required';
+  if (empty($_POST['user_age'])) {
+    $errors['user_age'] = 'Age is required';
   } else {
-    $age = $_POST['age'];
+    $user_age = $_POST['user_age'];
   }
-  if (empty($_POST['gender'])) {
-    $errors['gender'] = 'Gender is required';
+  if (empty($_POST['user_gender'])) {
+    $errors['user_gender'] = 'Gender is required';
   } else {
-    $gender = $_POST['gender'];
+    $user_gender = $_POST['user_gender'];
   }
 
-  if (empty($_POST['email'])) {
-    $errors['email'] = 'Email is required';
+  if (empty($_POST['user_email'])) {
+    $errors['user_email'] = 'Email is required';
   } else {
-    $email = $_POST['email'];
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-      $errors['email'] = "Invalid email format";
+    $user_email = $_POST['user_email'];
+    if (!filter_var($user_email, FILTER_VALIDATE_EMAIL)) {
+      $errors['user_email'] = "Invalid email format";
     } else {
-      $sql_check_email = "SELECT * FROM `employees` WHERE email='$email'";
+      $sql_check_email = "SELECT * FROM `em_users` WHERE user_email='$user_email'";
       $result_check_email = $con->query($sql_check_email);
 
       if ($result_check_email->num_rows > 0) {
-        $errors['email'] = "Email already exists";
+        $errors['user_email'] = "Email already exists";
       }
     }
   }
-  if (!empty($_POST['mobile'])) {
-    $mobile = $_POST['mobile'];
+  if (!empty($_POST['user_phone'])) {
+    $user_phone = $_POST['user_phone'];
     $pattern = '/^[0-9]{10}+$/';
-    if (!preg_match($pattern, $mobile)) {
-      $errors['mobile'] = "Mobile Number must be 10 digits long and contains number from [0 to 9].";
+    if (!preg_match($pattern, $user_phone)) {
+      $errors['user_phone'] = "Mobile Number must be 10 digits long and contains number from [0 to 9].";
     } else {
-      $mobile = $_POST['mobile'];
+      $user_phone = $_POST['user_phone'];
     }
+  }else{
+    $errors['user_phone']="Mobile Number must be filled out";
   }
-  if (empty($_POST['role'])) {
-    $errors['role'] = 'Role is required.';
+  if (empty($_POST['user_role_id'])) {
+    $errors['user_role_id'] = 'Role is required.';
   } else {
-    $role = $_POST['role'];
+    $user_role_id = $_POST['user_role_id'];
   }
 
-  if (!empty($_POST['password'])) {
-    $password = $_POST['password'];
+  if (!empty($_POST['user_password'])) {
+    $user_password = $_POST['user_password'];
     $pattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>])[A-Za-z\d!@#$%^&*()\-_=+{};:,<.>.]{8,}$/';
 
-    if (!preg_match($pattern, $password)) {
-      $errors['password'] = "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.";
+    if (!preg_match($pattern, $user_password)) {
+      $errors['user_password'] = "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.";
     } 
   } else {
-    $errors['password'] = "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.";
+    $errors['user_password'] = "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.";
   }
 
   if (empty($_POST['cpassword'])) {
     $errors['cpassword'] = 'Please Retype Password Again.';
   } else {
     $cpassword = $_POST['cpassword'];
-    if($cpassword!=$password){
+    if($cpassword!=$user_password){
         $error['cpassword']='Password not match';
     }
     else{
-        $password=md5($password);
+        $password=md5($user_password);
     }
   }
 
-  if(empty($_POST['country'])){
-    $errors['country']='Country name required';
+  if(empty($_POST['user_country'])){
+    $errors['user_country']='Country name required';
 }
 else{
-    $country_id = $_POST['country'];
-$get_country = "select c_name from Country where id=$country_id";
+    $country_id = $_POST['user_country'];
+$get_country = "select country_name from em_countries where country_id=$country_id";
 $result =  mysqli_query($con, $get_country);
 $row= mysqli_fetch_array($result);
-$country = $row['c_name'];
+$user_country = $row['country_name'];
 }
 
 
-if(empty($_POST['state'])){
-  $errors['state']='State name required';
+if(empty($_POST['user_state'])){
+  $errors['user_state']='State name required';
 }
 else{
-  $state_id = $_POST['state'];
-$get_state = "select state_name from State where id=$state_id";
+  $state_id = $_POST['user_state'];
+$get_state = "select state_name from em_states where state_id=$state_id";
 $result =  mysqli_query($con, $get_state);
 $row= mysqli_fetch_array($result);
-$state = $row['state_name'];
+if(mysqli_num_rows($result)> 0){
+$user_state = $row['state_name'];}
+else{
+  $errors['user_state']='State name required';
+}
 }
 
-if(empty($_POST['city'])){
-  $errors['city']='City name required';
+if(empty($_POST['user_city'])){
+  $errors['user_city']='City name required';
 }
 else{
-  $city_id = $_POST['city'];
-$get_city = "select city_name from City where id=$city_id";
+  $city_id = $_POST['user_city'];
+$get_city = "select city_name from em_cities where city_id=$city_id";
 $result =  mysqli_query($con, $get_city);
 $row= mysqli_fetch_array($result);
-$city = $row['city_name'];
+if(mysqli_num_rows($result)> 0){
+  $user_city = $row['city_name'];}
+  else{
+    $errors['user_city']='City name required';
+  }
+
 }
 
 
@@ -142,12 +153,12 @@ if (!empty($_POST['confirmation'])) {
 else{
   $confirmation = 0;
 }
-  $createdAT = time();
+  $user_createdAt = time();
 
   //  echo var_dump($errors);
   if (empty($errors)) {
    // $country = $_POST['country'];
-    $sql = "insert into `employees` (fname,lname,age,gender,email,mobile,role_id,password,country,state,city,createdAT,confirm) values('$fname','$lname','$age','$gender','$email','$mobile','$role','$password','$country','$state','$city','$createdAT','$confirmation')";
+    $sql = "insert into `em_users` (user_first_name,user_last_name,user_age,user_gender,user_email,user_phone,user_role_id,user_password,user_country,user_state,user_city,user_createdAt,user_confirm) values('$user_first_name ','$user_last_name ','$user_age','$user_gender','$user_email','$user_phone','$user_role_id','$user_password','$user_country','$user_state','$user_city','$user_createdAt','$confirmation')";
     $result = mysqli_query($con, $sql);
 
     if ($result) {
@@ -179,20 +190,20 @@ else{
   <script>
     function validateForm() {
       var isValid = true;
-      var fname = document.forms["signupForm"]["fname"].value;
-      var lname = document.forms["signupForm"]["lname"].value;
-      var age = document.forms["signupForm"]["age"].value;
-      var gender = document.forms["signupForm"]["gender"].value;
-      var email = document.forms["signupForm"]["email"].value;
-      var mobile = document.forms["signupForm"]["mobile"].value;
-      var role = document.forms["signupForm"]["role"].value;
-      var country = document.forms["signupForm"]["country"].value;
-      var state = document.forms["signupForm"]["state"].value;
-      var city = document.forms["signupForm"]["city"].value;
-      var password = document.forms["signupForm"]["password"].value;
+      var user_first_name  = document.forms["signupForm"]["user_first_name "].value;
+      var user_last_name  = document.forms["signupForm"]["user_lastt_name "].value;
+      var user_age = document.forms["signupForm"]["user_age"].value;
+      var user_gender = document.forms["signupForm"]["user_gender"].value;
+      var user_email = document.forms["signupForm"]["user_email"].value;
+      var user_phone = document.forms["signupForm"]["user_phone"].value;
+      var user_role_id = document.forms["signupForm"]["user_role_id"].value;
+      var user_country = document.forms["signupForm"]["user_country"].value;
+      var user_state = document.forms["signupForm"]["user_state"].value;
+      var user_city = document.forms["signupForm"]["user_city"].value;
+      var user_password = document.forms["signupForm"]["user_password"].value;
       var cpassword = document.forms["signupForm"]["cpassword"].value;
-      var emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
-      var passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      var user_emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+      var user_passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
       document.getElementById("firstnameError").innerHTML = "";
       document.getElementById("lastnameError").innerHTML = "";
@@ -208,64 +219,64 @@ else{
       document.getElementById("cpasswordError").innerHTML = "";
 
 
-      if (fname == "") {
+      if (user_first_name== "") {
         document.getElementById("firstnameError").innerHTML = "First name must be filled out.";
         isValid = false;
       }
 
-      if (lname == "") {
+      if (user_last_name== "") {
         document.getElementById("lastnameError").innerHTML = "Last name must be filled out.";
         isValid = false;
       }
 
-      if (age == "") {
+      if (user_age == "") {
         document.getElementById("ageError").innerHTML = "Age must be filled out.";
         isValid = false;
       }
 
-      if (gender == "") {
+      if (user_gender == "") {
         document.getElementById("genderError").innerHTML = "Gender must be filled out.";
         isValid = false;
       }
 
-      if (email == "") {
+      if (user_email == "") {
         document.getElementById("emailError").innerHTML = "Email must be filled out.";
         isValid = false;
-      } else if (!email.match(emailPattern)) {
+      } else if (!user_email.match(user_emailPattern)) {
         document.getElementById("emailError").innerHTML = "Please enter a valid email address.";
         isValid = false;
       }
 
 
-      if (mobile == "") {
+      if (user_phone == "") {
         document.getElementById("mobileError").innerHTML = "Mobile Number must be filled out.";
         isValid = false;
       }
 
-      if (role == "") {
+      if (user_role_id == "") {
         document.getElementById("roleError").innerHTML = "Role must be filled out.";
         isValid = false;
       }
 
-      if (country == "") {
+      if (user_country == "") {
         document.getElementById("countryError").innerHTML = "Country must be filled out.";
         isValid = false;
       }
 
-      if (state == "") {
+      if (user_state == "") {
                     document.getElementById("stateError").innerHTML = "State must be filled out";
                     isValid = false;
                 }
 
-       if (city == "") {
+       if (user_city == "") {
                   document.getElementById("cityError").innerHTML = "City must be filled out";
                     isValid = false;
             }
 
-      if (password == "") {
+      if (user_password == "") {
         document.getElementById("passwordError").innerHTML = "Password must be filled out.";
         isValid = false;
-      } else if (!password.match(passwordPattern)) {
+      } else if (!user_password.match(user_passwordPattern)) {
         document.getElementById("passwordError").innerHTML = "Password must be at least 8 characters long and include at least one lowercase letter, one uppercase letter, one numeric digit, and one special character.";
         isValid = false;
       }
@@ -274,7 +285,7 @@ else{
                   document.getElementById("cpasswordError").innerHTML = "Please Retype Password.";
                     isValid = false;
             }
-        else if(!cpassword.match(password)){
+        else if(!cpassword.match(user_password)){
             document.getElementById("cpasswordError").innerHTML = "Password dosen't match.";
             isValid = false;
         }
@@ -338,7 +349,7 @@ else{
         <h1>Add User</h1>
         <div class="list-contet">
 
-          <form name="signupForm" method="POST" onsubmit=" return validateForm()" class="form-edit">
+          <form novalidate name="signupForm" method="POST" onsubmit=" return validateForm()" class="form-edit">
 
             <div class="add-msgs" id="error-box">
             <div class="error-message-div error-msg" id="msg" style="display:none"><img src="../images/unsucess-msg.png"><strong>UnSucess!</strong> New
@@ -350,8 +361,8 @@ else{
                 <label>First Name : <span>*</span></label>
               </div>
               <div class="input-field">
-                <input type="text" class="search-box" name="fname" placeholder="Enter First Name" value="<?php echo isset($fname) ? $fname : ''; ?>" />
-                <span id="firstnameError" class="error"><?php echo isset($errors['fname']) ? $errors['fname'] : ''; ?></span>
+                <input type="text" class="search-box" name="user_first_name" placeholder="Enter First Name" value="<?php echo isset($user_first_name) ? $user_first_name : ''; ?>" />
+                <span id="firstnameError" class="error"><?php echo isset($errors['user_first_name']) ? $errors['user_first_name'] : ''; ?></span>
               </div>
             </div>
             <div class="form-row">
@@ -359,8 +370,8 @@ else{
                 <label>Last Name : <span>*</span></label>
               </div>
               <div class="input-field">
-                <input type="text" class="search-box" name="lname" placeholder="Enter Last Name" value="<?php echo isset($lname) ? $lname : ''; ?>" />
-                <span id="lastnameError" class="error"><?php echo isset($errors['lname']) ? $errors['lname'] : ''; ?></span>
+                <input type="text" class="search-box" name="user_last_name" placeholder="Enter Last Name" value="<?php echo isset($user_last_name) ? $user_last_name : ''; ?>" />
+                <span id="lastnameError" class="error"><?php echo isset($errors['user_last_name']) ? $errors['user_last_name'] : ''; ?></span>
               </div>
             </div>
 
@@ -369,8 +380,8 @@ else{
                 <label>Age: <span>*</span></label>
               </div>
               <div class="input-field">
-                <input type="text" class="search-box" name="age" placeholder="Enter Age" value="<?php echo isset($age) ? $age : ''; ?>" />
-                <span id="ageError" class="error"><?php echo isset($errors['age']) ? $errors['age'] : ''; ?></span>
+                <input type="text" class="search-box" name="user_age" placeholder="Enter Age" value="<?php echo isset($user_age) ? $user_age : ''; ?>" />
+                <span id="ageError" class="error"><?php echo isset($errors['user_age']) ? $errors['user_age'] : ''; ?></span>
               </div>
             </div>
 
@@ -379,8 +390,8 @@ else{
                <label>Gender: <span>*</span> </label>
           </div>
             <div class="input-field">
-        <label><input type="radio" name="gender" value="Male"> <span>Male </span></label><label> <input type="radio" name="gender" value="Female"> <span>Female</span> </label><br>
-        <span id="genderError" class="error"><?php echo isset($errors['gender']) ? $errors['gender'] : ''; ?></span>
+        <label><input type="radio" name="user_gender" value="Male" <?php if($user_gender=='Male') { echo 'checked';}?>> <span>Male </span></label><label> <input type="radio" name="user_gender" value="Female" <?php if($user_gender=='Female') { echo 'checked';}?>> <span>Female</span> </label><br>
+        <span id="genderError" class="error"><?php echo isset($errors['user_gender']) ? $errors['user_gender'] : ''; ?></span>
 
  </div>
  </div>
@@ -391,8 +402,8 @@ else{
                 <label>Email: <span>*</span></label>
               </div>
               <div class="input-field">
-                <input type="text" class="search-box" name="email" placeholder="Enter Email" value="<?php echo isset($email) ? $email : ''; ?>" />
-                <span id="emailError" class="error"><?php echo isset($errors['email']) ? $errors['email'] : ''; ?></span>
+                <input type="text" class="search-box" name="user_email" placeholder="Enter Email" value="<?php echo isset($user_email) ? $user_email : ''; ?>" />
+                <span id="emailError" class="error"><?php echo isset($errors['user_email']) ? $errors['user_email'] : ''; ?></span>
               </div>
             </div>
 
@@ -401,8 +412,8 @@ else{
                 <label>Mobile: <span>*</span></label>
               </div>
               <div class="input-field">
-                <input type="text" class="search-box" name="mobile" placeholder="Enter Mobile No." value="<?php echo isset($mobile) ? $mobile : ''; ?>" />
-                <span id="mobileError" class="error"><?php echo isset($errors['mobile']) ? $errors['mobile'] : ''; ?></span>
+                <input type="text" class="search-box" name="user_phone" placeholder="Enter Mobile No." value="<?php echo isset($user_phone) ? $user_phone : ''; ?>" />
+                <span id="mobileError" class="error"><?php echo isset($errors['user_phone']) ? $errors['user_phone'] : ''; ?></span>
               </div>
             </div>
            <div class="form-row">
@@ -411,26 +422,26 @@ else{
               </div>
               <div class="input-field">
                 <div class="select">
-                  <select name="role" class="role-info" id="role">
+                  <select name="user_role_id" class="role-info" id="role">
                     <option value="">Select Your Role</option>
                   <?php
-                    $sql1= "select *from emp_roles";
+                    $sql1= "select *from em_roles";
                     $result1=mysqli_query($con,$sql1);
                     while($row1=mysqli_fetch_array( $result1)) {
-                      if($role==$row1['id']){
-                        echo "<option selected value='$row1[id]'>$row1[role]</option>";
+                      if($user_role_id==$row1['role_id']){
+                        echo "<option selected value='$row1[role_id]'>$row1[role_name]</option>";
                       }
                       else{
-                        if($row1['id']==2){
-                          echo "<option selected value='$row1[id]'>$row1[role]</option>";
+                        if($row1['role_id']==2){
+                          echo "<option selected value='$row1[role_id]'>$row1[role_name]</option>";
                         }
                         else{
-                        echo "<option value='$row1[id]'>$row1[role]</option>";
+                        echo "<option value='$row1[role_id]'>$row1[role_name]</option>";
                       }
                       } }
                     ?>
                   </select>
-                  <span id="roleError" class="error"><?php echo isset($errors['role']) ? $errors['role'] : ''; ?></span>
+                  <span id="roleError" class="error"><?php echo isset($errors['user_role_id']) ? $errors['user_role_id'] : ''; ?></span>
                 </div>
               
               </div>
@@ -443,20 +454,20 @@ else{
               </div>
               <div class="input-field">
                 <div class="select">
-                  <select name="country" class="country-info" id="countryId" onchange="cntry_change()">
+                  <select name="user_country" class="country-info" id="countryId" onchange="cntry_change()">
                     <option value="">Select Your Country</option>
                     <?php
-                 $sql1 = "select *from Country";
+                 $sql1 = "select *from em_countries";
                  $result1 = $con->query($sql1);
                     while ($row1 = mysqli_fetch_array($result1)) {
-                      if ($country == $row1['id']) {
-                        echo "<option selected value='$row1[id]'>$row1[c_name]</option>";
+                      if ($user_country == $row1['country_id']) {
+                        echo "<option selected value='$row1[country_id]'>$row1[country_name]</option>";
                       }
-                      echo "<option value='$row1[id]'>$row1[c_name]</option>";
+                      echo "<option value='$row1[country_id]'>$row1[country_name]</option>";
                     }
                     ?>
                   </select>
-                  <span id="countryError" class="error"><?php echo isset($errors['country']) ? $errors['country'] : ''; ?></span>
+                  <span id="countryError" class="error"><?php echo isset($errors['user_country']) ? $errors['user_country'] : ''; ?></span>
                 </div>
 
               </div>
@@ -468,11 +479,11 @@ else{
               </div>
               <div class="input-field">
                 <div class="select">
-                <select disabled name="state" class="countries form-control" id="stateId" onclick="state_change()">
+                <select disabled name="user_state" class="countries form-control" id="stateId" onclick="state_change()">
                                 <option value="null">Select State</option>
                                
                             </select>
-                  <span id="stateError" class="error"><?php echo isset($errors['state']) ? $errors['state'] : ''; ?></span>
+                  <span id="stateError" class="error"><?php echo isset($errors['user_state']) ? $errors['user_state'] : ''; ?></span>
                 </div>
               </div>
             </div>
@@ -483,11 +494,11 @@ else{
               </div>
               <div class="input-field">
                 <div class="select">
-                <select disabled name="city" class="countries form-control" id="cityId">
+                <select disabled name="user_city" class="countries form-control" id="cityId">
                                 <option value="null">Select City</option>
                                 
                             </select>
-                  <span id="cityError" class="error"><?php echo isset($errors['city']) ? $errors['city'] : ''; ?></span>
+                  <span id="cityError" class="error"><?php echo isset($errors['user_city']) ? $errors['user_city'] : ''; ?></span>
                 </div>
               </div>
             </div>
@@ -498,8 +509,8 @@ else{
                 <label>Password: <span>*</span></label>
               </div>
               <div class="input-field">
-                <input type="password" class="search-box" name="password" placeholder="Enter Password" value="<?php echo isset($password) ? $password : ''; ?>" />
-                <span id="passwordError" class="error"><?php echo isset($errors['password']) ? $errors['password'] : ''; ?></span>
+                <input type="password" class="search-box" name="user_password" placeholder="Enter Password" value="<?php echo isset($user_password) ? $user_password : ''; ?>" />
+                <span id="passwordError" class="error"><?php echo isset($errors['user_password']) ? $errors['user_password'] : ''; ?></span>
               </div>
             </div>
             <div class="form-row">

@@ -6,29 +6,29 @@ if (!isset($_SESSION['loggedin']) || ($_SESSION['loggedin']) != TRUE) {
   exit;
 }
 include '../connect.php';
-$myData = $_SESSION['id'];
-$sql = "select *from employees where id=$myData";
+$myData = $_SESSION['user_id'];
+$sql = "select *from em_users where user_id=$myData";
 $result = mysqli_query($con, $sql);
 $row = mysqli_fetch_array($result);
 
-$fname = $row['fname'];
-$lname = $row['lname'];
-$age = $row['age'];
-$gender = $row['gender'];
-$email = $row['email'];
-$mobile = $row['mobile'];
-$role = $row['role_id'];
-$sql1 = "select *from emp_roles";
+$user_first_name = $row['user_first_name'];
+$user_last_name = $row['user_last_name'];
+$user_age = $row['user_age'];
+$user_gender = $row['user_gender'];
+$user_email = $row['user_email'];
+$user_phone = $row['user_phone'];
+$user_role_id = $row['user_role_id'];
+$sql1 = "select *from em_roles";
 $result1 = mysqli_query($con, $sql1);
 while ($row1 = mysqli_fetch_array($result1)) {
-  if ($role == $row1['id']) {
-    $role_name = $row1['role'];
+  if ($user_role_id == $row1['role_id']) {
+    $user_role_id_name = $row1['role_name'];
   }
 }
 
-$country = $row['country'];
-$state = $row['state'];
-$city = $row['city'];
+$user_country = $row['user_country'];
+$user_state = $row['user_state'];
+$user_city = $row['user_city'];
 
 ?>
 <html lang="en">
@@ -112,7 +112,7 @@ $city = $row['city'];
           <div class="user-data">
             <div class="profile-pic">
               <!-- <img src="images/user.png" alt="img" id="profile-image"> -->
-              <img src="<?php echo isset($row['profile_image']) ? '../upload/' . $row['profile_image'] : '../images/user_icon.jpeg'; ?>" alt="img" id="profile-image">
+              <img src="<?php echo isset($row['user_image']) ? '../upload/' . $row['user_image'] : '../images/user_icon.jpeg'; ?>" alt="img" id="profile-image">
 
               <form id="image-form" action="../upload_image.php" method="post" enctype="multipart/form-data">
                 <div class=edit-btn>
@@ -124,50 +124,50 @@ $city = $row['city'];
                 <!-- <button type="submit" name="upload" class='submit-btn'>Upload Image</button> -->
               </form>
               <?php
-             echo " <button onclick='myFunction($row[id])'><i id='profile-dlt'class='fa-solid fa-trash'></i></button> "?>
+             echo " <button onclick='myFunction($row[user_id])'><i id='profile-dlt'class='fa-solid fa-trash'></i></button> "?>
            
             </div>
             <div class="info-bar">
               <table class="user-info-table">
                 <tr>
                   <th>First Name:</th>
-                  <td><?php echo $fname ?></td>
+                  <td><?php echo $user_first_name ?></td>
                 </tr>
                 <tr>
                   <th>Last Name:</th>
-                  <td><?php echo $lname ?></td>
+                  <td><?php echo $user_last_name ?></td>
                 </tr>
                 <tr>
                   <th>Age:</th>
-                  <td><?php echo $age ?></td>
+                  <td><?php echo $user_age ?></td>
                 </tr>
                 <tr>
                   <th>Gender:</th>
-                  <td><?php echo $gender ?></td>
+                  <td><?php echo $user_gender ?></td>
                 </tr>
                 <tr>
                   <th>E-Mail:</th>
-                  <td><?php echo $email ?></td>
+                  <td><?php echo $user_email ?></td>
                 </tr>
                 <tr>
                   <th>Mobile:</th>
-                  <td><?php echo $mobile ?></td>
+                  <td><?php echo $user_phone ?></td>
                 </tr>
                 <tr>
                   <th>Role:</th>
-                  <td><?php echo $role_name ?></td>
+                  <td><?php echo $user_role_id_name ?></td>
                 </tr>
                 <tr>
                   <th>Country:</th>
-                  <td><?php echo $country; ?></td>
+                  <td><?php echo $user_country; ?></td>
                 </tr>
                 <tr>
                   <th>State:</th>
-                  <td><?php echo $state ?></td>
+                  <td><?php echo $user_state ?></td>
                 </tr>
                 <tr>
                   <th>City:</th>
-                  <td><?php echo $city ?></td>
+                  <td><?php echo $user_city ?></td>
                 </tr>
               </table>
             </div>

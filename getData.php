@@ -26,15 +26,15 @@ function handlePostRequest() {
         $countryId = $decodedData['countryId'];
         
         include 'connect.php';
-        $sql = "select *from State where cntry_id=$countryId";
+        $sql = "select *from em_states where country_id=$countryId";
         $result1 = $con->query($sql);
 
         $arr = [];
 
         while ($row = $result1->fetch_assoc()) {
             $arr[] = [
-                'id' => $row['id'],
-                'cntry_id' => $row['cntry_id'],
+                'id' => $row['state_id'],
+                'cntry_id' => $row['country_id'],
                 'state_name' => $row['state_name'],
             ];
         }

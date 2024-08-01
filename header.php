@@ -5,7 +5,7 @@
 
         <div class="right_side">
             <ul>
-                <li><a href="../myProfile">Welcome <?php echo $_SESSION["fname"]; ?></a></li>
+                <li><a href="../myProfile">Welcome <?php echo $_SESSION["user_first_name"]; ?></a></li>
                 <li><a href="../logout">Log Out</a></li>
             </ul>
         </div>
@@ -29,5 +29,8 @@
     }
     else if(window.location.pathname.includes('myProfile')){
     document.getElementById('myProfile').className="active";
+    }
+    else if(window.location.pathname.includes('add-user')){
+    document.getElementById('listUsers').className="active";
     }
 </script>

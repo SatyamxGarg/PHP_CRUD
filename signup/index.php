@@ -9,48 +9,48 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == TRUE){
     $showerror = false;
     $show_alert = false;
     include '../connect.php';
-    $sql1="select * from Country";
+    $sql1="select * from em_countries";
     $result1 = mysqli_query($con, $sql1);
 
-// $sql3="select * from city";
+// $sql3="select * from em_cities";
 // $result3=mysqli_query($conn, $sql3);
-   $gender='';
-   $country='';
-   $state='';
+   $user_gender='';
+   $user_country='';
+   $user_state='';
 if (isset($_POST['submit'])) {
     $errors = [];
   
-    if (empty($_POST['fname'])) {
-      $errors["fname"] = "First name is required.";
+    if (empty($_POST['user_first_name'])) {
+      $errors["user_first_name"] = "First name is required.";
     } else {
-      $fname = $_POST['fname'];
+      $user_first_name = $_POST['user_first_name'];
     }
   
-    if (empty($_POST['lname'])) {
-      $errors['lname'] = 'Last name is required.';
+    if (empty($_POST['user_last_name'])) {
+      $errors['user_last_name'] = 'Last name is required.';
     } else {
-      $lname = $_POST['lname'];
+      $user_last_name = $_POST['user_last_name'];
     }
   
     if (empty($_POST['age'])) {
       $errors['age'] = 'Age is required';
     } else {
-      $age = $_POST['age'];
+      $user_age = $_POST['age'];
     }
     if (empty($_POST['gender'])) {
       $errors['gender'] = 'Gender is required';
     } else {
-      $gender = $_POST['gender'];
+      $user_gender = $_POST['gender'];
     }
   
     if (empty($_POST['email'])) {
       $errors['email'] = 'Email is required';
     } else {
-      $email = $_POST['email'];
-      if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+      $user_email = $_POST['email'];
+      if (!filter_var($user_email, FILTER_VALIDATE_EMAIL)) {
         $errors['email'] = "Invalid email format";
       } else {
-        $sql_check_email = "SELECT * FROM `employees` WHERE email='$email'";
+        $sql_check_email = "SELECT * FROM `em_users` WHERE user_email='$user_email'";
         $result_check_email = $con->query($sql_check_email);
   
         if ($result_check_email->num_rows > 0) {
@@ -59,18 +59,18 @@ if (isset($_POST['submit'])) {
       }
     }
     if (!empty($_POST['mobile'])) {
-      $mobile = $_POST['mobile'];
+      $user_phone = $_POST['mobile'];
       $pattern = '/^[0-9]{10}+$/';
-      if (!preg_match($pattern, $mobile)) {
+      if (!preg_match($pattern, $user_phone)) {
         $errors['mobile'] = "Mobile Number must be 10 digits long and contains number from [0 to 9].";
       } else {
-        $mobile = $_POST['mobile'];
+        $user_phone = $_POST['mobile'];
       }
     }
     if (empty($_POST['role'])) {
       $errors['role'] = 'Role is required.';
     } else {
-      $role = $_POST['role'];
+      $user_role_id = $_POST['role'];
     }
   
     if (!empty($_POST['password'])) {
@@ -101,10 +101,10 @@ if (isset($_POST['submit'])) {
   }
   else{
       $country_id = $_POST['country'];
-  $get_country = "select c_name from Country where id=$country_id";
+  $get_country = "select country_name from em_countries where country_id=$country_id";
   $result =  mysqli_query($con, $get_country);
   $row= mysqli_fetch_array($result);
-  $country = $row['c_name'];
+  $user_country = $row['country_name'];
   }
   
   
@@ -113,37 +113,37 @@ if (isset($_POST['submit'])) {
   }
   else{
     $state_id = $_POST['state'];
-  $get_state = "select state_name from State where id=$state_id";
+  $get_state = "select state_name from em_states where state_id=$state_id";
   $result =  mysqli_query($con, $get_state);
   $row= mysqli_fetch_array($result);
-  $state = $row['state_name'];
+  $user_state = $row['state_name'];
   }
   
   if(empty($_POST['city'])){
     $errors['city']='City name required';
   }
   else{
-    $city_id = $_POST['city'];
-  $get_city = "select city_name from City where id=$city_id";
+    $user_city_id = $_POST['city'];
+  $get_city = "select city_name from em_cities where city_id=$user_city_id";
   $result =  mysqli_query($con, $get_city);
   $row= mysqli_fetch_array($result);
-  $city = $row['city_name'];
+  $user_city = $row['city_name'];
   }
   
-    $createdAT = time();
+    $user_createdAt = time();
 
       if(empty($errors)) {
         
          
-          $createdAt = time();
-          $updatedAt = time();
+          $user_createdAt = time();
+          $user_updatedAt = time();
         //   if($password==$c_password){
-            $sql = "insert into `employees` (fname,lname,age,gender,email,mobile,role_id,password,country,state,city,createdAT) values('$fname','$lname','$age','$gender','$email','$mobile','$role','$password','$country','$state','$city','$createdAT')";
+            $sql = "insert into `em_users` (user_first_name,user_last_name,user_age,user_gender,user_email,user_phone,user_role_id,user_password,user_country,user_state,user_city,user_createdAt) values('$user_first_name','$user_last_name','$user_age','$user_gender','$user_email','$user_phone','$user_role_id','$password','$user_country','$user_state','$user_city','$user_createdAt')";
    
           if ($con->query($sql) === TRUE) {
             $show_alert = true;
-            $get_name=$fname;
-            send_mail($get_name, $email, "signup",null,null);
+            $get_name=$user_first_name;
+            send_mail($get_name, $user_email, "signup",null,null);
             header('location:../login');
             exit(); 
             } else {
@@ -178,8 +178,8 @@ if (isset($_POST['submit'])) {
     <script>
     function validateForm() {
       var isValid = true;
-      var fname = document.forms["signupForm"]["fname"].value;
-      var lname = document.forms["signupForm"]["lname"].value;
+      var user_first_name = document.forms["signupForm"]["user_first_name"].value;
+      var user_last_name = document.forms["signupForm"]["user_last_name"].value;
       var age = document.forms["signupForm"]["age"].value;
       var gender = document.forms["signupForm"]["gender"].value;
       var email = document.forms["signupForm"]["email"].value;
@@ -208,12 +208,12 @@ if (isset($_POST['submit'])) {
       document.getElementById("cpasswordError").innerHTML = "";
 
 
-      if (fname == "") {
+      if (user_first_name == "") {
         document.getElementById("firstnameError").innerHTML = "First name must be filled out.";
         isValid = false;
       }
 
-      if (lname == "") {
+      if (user_last_name == "") {
         document.getElementById("lastnameError").innerHTML = "Last name must be filled out.";
         isValid = false;
       }
@@ -336,23 +336,23 @@ if (isset($_POST['submit'])) {
                     <div class="form-group">
                         <label for="fname">Firstname: <span>*</span></label>
                         <div class="input-field">
-                <input type="text" class="search-box" name="fname" placeholder="Enter First Name" style="width:640px" value="<?php echo isset($fname) ? $fname : ''; ?>" />
-                <span id="firstnameError" class="error"><?php echo isset($errors['fname']) ? $errors['fname'] : ''; ?></span>
+                <input type="text" class="search-box" name="user_first_name" placeholder="Enter First Name" style="width:640px" value="<?php echo isset($user_first_name) ? $user_first_name : ''; ?>" />
+                <span id="firstnameError" class="error"><?php echo isset($errors['user_first_name']) ? $errors['user_first_name'] : ''; ?></span>
               </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="lname">Lastname: <span>*</span></label>
+                        <label for="user_last_name">Lastname: <span>*</span></label>
                         <div class="input-field">
-                <input type="text" class="search-box" name="lname" placeholder="Enter Last Name" style="width:640px" value="<?php echo isset($lname) ? $lname : ''; ?>" />
-                <span id="lastnameError" class="error"><?php echo isset($errors['lname']) ? $errors['lname'] : ''; ?></span>
+                <input type="text" class="search-box" name="user_last_name" placeholder="Enter Last Name" style="width:640px" value="<?php echo isset($user_last_name) ? $user_last_name : ''; ?>" />
+                <span id="lastnameError" class="error"><?php echo isset($errors['user_last_name']) ? $errors['user_last_name'] : ''; ?></span>
               </div>
                     </div>
 
                     <div class="form-group">
                     <label for="lname">Age: <span>*</span></label>
                     <div class="input-field">
-                <input type="text" class="search-box" name="age" placeholder="Enter Age" style="width:640px" value="<?php echo isset($age) ? $age : ''; ?>" />
+                <input type="text" class="search-box" name="age" placeholder="Enter Age" style="width:640px" value="<?php echo isset($user_age) ? $user_age : ''; ?>" />
                 <span id="ageError" class="error"><?php echo isset($errors['age']) ? $errors['age'] : ''; ?></span>
               </div>
                     </div>
@@ -362,7 +362,7 @@ if (isset($_POST['submit'])) {
              <div> <label for="gender">Gender: <span>*</span></label></div>
                    
             <div class="input-field" id="label-gender">
-        <label><input type="radio" name="gender" value="Male" <?php if($gender=='Male') { echo 'checked';}?> > <span>Male </span></label><label> <input type="radio" name="gender" value="Female" ?<?php if($gender=='Female') { echo 'checked';}?>> <span>Female</span> </label><br>
+        <label><input type="radio" name="gender" value="Male" <?php if($user_gender=='Male') { echo 'checked';}?> > <span>Male </span></label><label> <input type="radio" name="gender" value="Female" ?<?php if($user_gender=='Female') { echo 'checked';}?>> <span>Female</span> </label><br>
         <span id="genderError" class="error"><?php echo isset($errors['gender']) ? $errors['gender'] : ''; ?></span>
 
  </div>
@@ -371,7 +371,7 @@ if (isset($_POST['submit'])) {
                          <div class="form-group">
                         <label for="email">Email: <span>*</span></label>
                         <div class="input-field">
-                <input type="text" class="search-box" name="email" style="width:640px" placeholder="Enter Email" value="<?php echo isset($email) ? $email : ''; ?>" />
+                <input type="text" class="search-box" name="email" style="width:640px" placeholder="Enter Email" value="<?php echo isset($user_email) ? $user_email : ''; ?>" />
                 <span id="emailError" class="error"><?php echo isset($errors['email']) ? $errors['email'] : ''; ?></span>
               </div>
                     </div>
@@ -380,7 +380,7 @@ if (isset($_POST['submit'])) {
                     <div class="form-group">
                         <label for="mobile">Mobile: <span>*</span></label>
                         <div class="input-field">
-                <input type="text" class="search-box" name="mobile" placeholder="Enter Mobile No." style="width:640px" value="<?php echo isset($mobile) ? $mobile : ''; ?>" />
+                <input type="text" class="search-box" name="mobile" placeholder="Enter Mobile No." style="width:640px" value="<?php echo isset($user_phone) ? $user_phone : ''; ?>" />
                 <span id="mobileError" class="error"><?php echo isset($errors['mobile']) ? $errors['mobile'] : ''; ?></span>
               </div>
                     </div>
@@ -393,13 +393,13 @@ if (isset($_POST['submit'])) {
                   <select name="role" class="role-info" id="role" style="width:640px" >
                     <option value="">Select Your Role</option>
                   <?php
-                    $sql1= "select *from emp_roles";
+                    $sql1= "select *from em_roles";
                     $result1=mysqli_query($con,$sql1);
                     while($row1=mysqli_fetch_array( $result1)) {
-                      if($role==$row1['id']){
-                        echo "<option selected value='$row1[id]'>$row1[role]</option>";
+                      if($user_role_id==$row1['role_id']){
+                        echo "<option selected value='$row1[role_id]'>$row1[role_name]</option>";
                       }
-                      echo "<option value='$row1[id]'>$row1[role]</option>";
+                      echo "<option value='$row1[role_id]'>$row1[role_name]</option>";
                     }
                     ?>
                   </select>
@@ -415,16 +415,16 @@ if (isset($_POST['submit'])) {
         
               <div class="input-field">
                 <div class="select">
-                  <select name="country" class="country-info" id="countryId" style="width:640px" onchange="cntry_change()" value="<?php echo $country; ?>">
+                  <select name="country" class="country-info" id="countryId" style="width:640px" onchange="cntry_change()" value="<?php echo $user_country; ?>">
                     <option value="">Select Your Country</option>
                     <?php
-                 $sql1 = "select *from Country";
+                 $sql1 = "select *from em_countries";
                  $result1 = $con->query($sql1);
                     while ($row1 = mysqli_fetch_array($result1)) {
-                      if ($country == $row1['id']) {
-                        echo "<option selected value='$row1[id]'>$row1[c_name]</option>";
+                      if ($user_country == $row1['country_id']) {
+                        echo "<option selected value='$row1[country_id]'>$row1[country_name]</option>";
                       }
-                      echo "<option value='$row1[id]'>$row1[c_name]</option>";
+                      echo "<option value='$row1[country_id]'>$row1[country_name]</option>";
                     }
                     ?>
                   </select>
@@ -438,7 +438,7 @@ if (isset($_POST['submit'])) {
                 <label for="state">State: <span>*</span> </label>
               <div class="input-field">
                 <div class="select">
-                <select disabled name="state" class="countries form-control" id="stateId" style="width:640px" onclick="state_change()" value="<?php echo $state; ?>">
+                <select disabled name="state" class="countries form-control" id="stateId" style="width:640px" onclick="state_change()" value="<?php echo $user_state; ?>">
                                 <option value="null">Select State</option>
                                
                             </select>
@@ -451,7 +451,7 @@ if (isset($_POST['submit'])) {
                 <label for="city">City: <span>*</span> </label>
               <div class="input-field">
                 <div class="select">
-                <select disabled name="city" class="countries form-control" style="width:640px" id="cityId" value="<?php echo $city; ?>">
+                <select disabled name="city" class="countries form-control" style="width:640px" id="cityId" value="<?php echo $user_city; ?>">
                                 <option value="null">Select City</option>
                                 
                             </select>

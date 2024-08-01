@@ -13,12 +13,12 @@ if (isset($_GET['deleteid'])) {
     $userId = intval($_GET['deleteid']);
 
   
-    $sql = "SELECT profile_image FROM employees WHERE id = $userId";
+    $sql = "SELECT user_image FROM em_users WHERE user_id = $userId";
     $result = mysqli_query($con, $sql);
 
     if ($result && mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
-        $imagePath = 'upload/' . $row['profile_image'];
+        $imagePath = 'upload/' . $row['user_image'];
 
       
         if (file_exists($imagePath)) {
@@ -26,7 +26,7 @@ if (isset($_GET['deleteid'])) {
         }
 
         
-        $sql = "UPDATE employees SET profile_image = NULL WHERE id = $userId";
+        $sql = "UPDATE em_users SET user_image = NULL WHERE user_id = $userId";
         mysqli_query($con, $sql);
 
        

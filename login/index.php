@@ -13,11 +13,11 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == TRUE){
 
 
 if (isset($_POST['submit'])) {
-    $email = $_POST["email"];
-    $password = $_POST["password"];
+    $user_email = $_POST["user_email"];
+    $user_password = $_POST["user_password"];
 
-    $hash_password = md5($password);
-    $sql = "SELECT * from employees where email='$email' AND password='$hash_password' AND isdeleted!=1";
+    $hash_password = md5($user_password);
+    $sql = "SELECT * from em_users where user_email='$user_email' AND user_password='$hash_password' AND user_isDeleted!=1";
 
     $result = mysqli_query($con, $sql);
     $num = mysqli_num_rows($result);
@@ -25,9 +25,9 @@ if (isset($_POST['submit'])) {
     if ($num >= 1) {
         $login = "true";
         $_SESSION['loggedin'] = true;
-        $_SESSION['email'] = $email;
-        $_SESSION['fname'] = $row5['fname'];
-        $_SESSION['id'] = $row5['id'];
+        $_SESSION['user_email'] = $user_email;
+        $_SESSION['user_first_name'] = $row5['user_first_name'];
+        $_SESSION['user_id'] = $row5['user_id'];
         header("location:../dashboard");
     } else {
         $showError = "Invalid credentials";
@@ -56,25 +56,26 @@ if (isset($_POST['submit'])) {
 
  <script>
     function validateForm() {
+       
       var isValid = true;
-      var email = document.forms["loginForm"]["email"].value;
-      var password = document.forms["loginForm"]["password"].value;
-      var emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+      var user_email = document.forms["loginForm"]["user_email"].value;
+      var user_password = document.forms["loginForm"]["user_password"].value;
+      var user_emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
 
-      document.getElementById("emailError").innerHTML = "";
-      document.getElementById("passwordError").innerHTML = "";
+      document.getElementById("user_emailError").innerHTML = "";
+      document.getElementById("user_passwordError").innerHTML = "";
 
 
-      if (email == "") {
-        document.getElementById("emailError").innerHTML = "Email must be filled out.";
+      if (user_email == "") {
+        document.getElementById("user_emailError").innerHTML = "Email must be filled out.";
         isValid = false;
-      } else if (!email.match(emailPattern)) {
-        document.getElementById("emailError").innerHTML = "Please enter a valid email address.";
+      } else if (!user_email.match(user_emailPattern)) {
+        document.getElementById("user_emailError").innerHTML = "Please enter a valid email address.";
         isValid = false;
       }
 
-      if (password == "") {
-        document.getElementById("passwordError").innerHTML = "Password must be filled out.";
+      if (user_password == "") {
+        document.getElementById("user_passwordError").innerHTML = "Password must be filled out.";
         isValid = false;
       }
 
@@ -108,16 +109,16 @@ if (isset($_POST['submit'])) {
                         echo '<div class="error-message-div error-msg"><img src="../images/unsucess-msg.png"><strong>Invalid!</strong> username or password </div>';
                     }
                     ?>
-                    <form name="loginForm" class="margin_bottom" role="form" method="POST" onsubmit=" return validateForm()">
+                    <form novalidate name="loginForm" class="margin_bottom" role="form" method="POST" onsubmit=" return validateForm()">
                         <div class="form-group">
                             <label for="email">E-mail</label>
-                            <input type="email" class="form-control" id="email" name="email" value="<?php echo isset($email) ? $email : ''; ?>" />
-                            <span id="emailError" class="error"><?php echo isset($errors['email']) ? $errors['email'] : ''; ?></span>
+                            <input type="email" class="form-control" id="email" name="user_email" value="<?php echo isset($user_email) ? $user_email : ''; ?>" />
+                            <span id="user_emailError" class="error"><?php echo isset($errors['user_email']) ? $errors['user_email'] : ''; ?></span>
                         </div>
                         <div class="form-group">
                             <label for="password">Password</label>
-                            <input type="password" class="form-control" id="password" name="password" />
-                            <span id="passwordError" class="error"><?php echo isset($errors['password']) ? $errors['password'] : ''; ?></span>
+                            <input type="password" class="form-control" id="password" name="user_password" />
+                            <span id="user_passwordError" class="error"><?php echo isset($errors['user_password']) ? $errors['user_password'] : ''; ?></span>
                         </div>
                         <button type="submit" name="submit" class="btn_login">Login</button>
                         <a href="../forgetPassword" style="float:right">Forget Password?</a>

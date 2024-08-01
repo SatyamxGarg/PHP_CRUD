@@ -9,20 +9,20 @@ include '../mailTemplates.php';
 if (isset($_GET['token'])) {
   $token = $_GET['token'];
   $id= $_GET['id'];
-  $sql = "select * from employees where id='$id' AND token_id='$token'";
+  $sql = "select * from em_users where user_id='$id' AND user_token='$token'";
   $result = mysqli_query($con, $sql);
   $row = mysqli_num_rows($result);
   $data = mysqli_fetch_array($result);
-  $fname=$data['fname'];
-  $email=$data['email'];
+  $user_first_name=$data['user_first_name'];
+  $user_email=$data['user_email'];
   $time1 = time();
   if ($row <= 0) {
     $_SESSION['status'] = "Invalid URL.";
     header("Location:../login");
   } else {
-    $time_store = $data['token_startAT'];
+    $time_store = $data['user_token_startAt'];
     if ($time_store + (60 * 2) < $time1) {
-      $sql = "UPDATE employees SET token_id=NULL,token_startAT=NULL WHERE id='$id'";
+      $sql = "UPDATE em_users SET user_token=NULL,user_token_startAt=NULL WHERE user_id='$id'";
       $result = mysqli_query($con, $sql);
       if ($result) {
         $_SESSION['status'] = "Time Expired.";
@@ -82,16 +82,16 @@ if (isset($_POST['password_update'])) {
     if (!empty($token)) {
 
       // checking token is valid or not
-      $check_token = "SELECT token_id FROM employees WHERE token_id='$token' LIMIT 1";
+      $check_token = "SELECT user_token FROM em_users WHERE user_token='$token' LIMIT 1";
       $check_token_run = mysqli_query($con, $check_token);
       if (mysqli_num_rows($check_token_run) > 0) {
         if ($new_password == $confirm_password) {
           $new_password = md5($new_password);
-          $update_password = "UPDATE employees SET password = '$new_password', token_id=NULL,token_startAT=NULL WHERE id='$id'";
+          $update_password = "UPDATE em_users SET user_password = '$new_password', user_token=NULL,user_token_startAt=NULL WHERE user_id='$id'";
           $update_password_run = mysqli_query($con, $update_password);
           if ($update_password_run) {
             $_SESSION['status'] = "Password Successfully Updated";
-            send_mail($fname, $email, "changepassword",null,null);
+            send_mail($user_first_name, $user_email, "changepassword",null,null);
             header("Location:../login");
             exit(0);
           } else {
@@ -166,7 +166,7 @@ if (isset($_POST['password_update'])) {
             <div class="error-message-div error-msg"><?php echo $_SESSION['status'];
                                                       unset($_SESSION['status']); ?></div>
           <?php endif; ?>
-          <form name="passForm" class="margin_bottom" onsubmit="return validateForm()" action="" role="form" method="POST">
+          <form novalidate name="passForm" class="margin_bottom" onsubmit="return validateForm()" action="" role="form" method="POST">
             <input type="hidden" name="password_token" value="<?php if (isset($_GET['token'])) {
                                                                 echo $_GET['token'];
                                                               } ?>">

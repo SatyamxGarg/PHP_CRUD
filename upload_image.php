@@ -6,13 +6,13 @@ if (!isset($_SESSION['loggedin']) || ($_SESSION['loggedin']) != TRUE) {
 }
 
 include 'connect.php';
-$userId = $_SESSION['id'];
+$userId = $_SESSION['user_id'];
 
-$sql='select profile_image from employees where id='.$userId;
+$sql='select user_image from em_users where user_id='.$userId;
 $result = mysqli_query($con,$sql);
 $row = mysqli_fetch_array($result);
-if($row['profile_image']!=NULL){
-  $imagePath = 'upload/' . $row['profile_image'];
+if($row['user_image']!=NULL){
+  $imagePath = 'upload/' . $row['user_image'];
 
       
   if (file_exists($imagePath)) {
@@ -40,7 +40,7 @@ if (isset($_FILES['profile']) && $_FILES['profile']['error'] === UPLOAD_ERR_OK) 
     // Move the file to the upload directory
     if (move_uploaded_file($fileTmpPath, $dest_path)) {
       // Update the database with the new file name
-      $sql = "UPDATE employees SET profile_image = ? WHERE id = ?";
+      $sql = "UPDATE em_users SET user_image = ? WHERE user_id = ?";
       $stmt = $con->prepare($sql);
       $stmt->bind_param('si', $newFileName, $userId);
       $stmt->execute();
